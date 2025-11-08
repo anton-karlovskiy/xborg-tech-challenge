@@ -4,13 +4,18 @@ import {
   createContext,
   useContext,
   useState,
-  useEffect,
-  ReactNode
+  useEffect
 } from "react";
 import { useRouter } from "next/navigation";
 
-import { userApi, UserProfile } from "@/lib/api";
-import { PAGE_URLS } from "@/app/constants";
+import {
+  userApi,
+  UserProfile
+} from "@/lib/api";
+import {
+  PAGE_URLS,
+  LOCAL_STORAGE_KEYS
+} from "@/app/constants";
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -22,14 +27,14 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
     // Check for existing session
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
     if (token) {
       // Verify token by fetching user profile
       userApi.getProfile()
@@ -38,7 +43,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         })
         .catch(() => {
           // Token invalid, clear it
-          localStorage.removeItem("token");
+          localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
         })
         .finally(() => {
           setLoading(false);
@@ -49,12 +54,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = (token: string, userData: UserProfile) => {
-    localStorage.setItem("token", token);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, token);
     setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
     setUser(null);
     router.push(PAGE_URLS.SIGN_IN);
   };
@@ -73,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
 export function useAuth() {
   const context = useContext(AuthContext);
@@ -81,5 +86,4 @@ export function useAuth() {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
-}
-
+};

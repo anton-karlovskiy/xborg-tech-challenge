@@ -3,4 +3,11 @@ const PAGE_URLS = {
   PROFILE: "/profile"
 };
 
-export { PAGE_URLS };
+const LOCAL_STORAGE_KEYS = {
+  TOKEN: "token"
+};
+
+export {
+  PAGE_URLS,
+  LOCAL_STORAGE_KEYS
+};

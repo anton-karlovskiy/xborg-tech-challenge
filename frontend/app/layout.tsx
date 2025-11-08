@@ -8,11 +8,11 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "XBorg Tech Challenge",
-  description: "User profile management with Google OAuth",
+  description: "User profile management with Google OAuth"
 };
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode
 }) {

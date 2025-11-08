@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import { LOCAL_STORAGE_KEYS } from "@/app/constants";
+
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
   headers: {
@@ -10,7 +12,7 @@ const api = axios.create({
 // Add token to requests
 api.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
