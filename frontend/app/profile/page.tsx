@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 import { useAuth } from "@/app/contexts/auth-context";
 import { userApi, UpdateProfileData } from "@/lib/api";
@@ -90,10 +91,13 @@ export default function ProfilePage() {
             {/* Profile Picture */}
             {user.picture && (
               <div className="flex justify-center">
-                <img
+                <Image
                   src={user.picture}
                   alt="Profile"
-                  className="w-32 h-32 rounded-full border-4 border-indigo-500"
+                  width={128}
+                  height={128}
+                  priority
+                  className="rounded-full border-4 border-indigo-500"
                 />
               </div>
             )}
