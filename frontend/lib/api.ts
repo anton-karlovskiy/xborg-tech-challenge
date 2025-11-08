@@ -22,13 +22,7 @@ api.interceptors.request.use((config) => {
 
 export interface GoogleLoginResponse {
   access_token: string;
-  user: {
-    id: string;
-    email: string;
-    firstName?: string;
-    lastName?: string;
-    picture?: string;
-  };
+  user: UserProfile;
 };
 
 export interface UserProfile {
