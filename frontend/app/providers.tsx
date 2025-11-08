@@ -27,7 +27,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
+function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
@@ -38,7 +38,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (token) {
       // Verify token by fetching user profile
       userApi.getProfile()
-        .then((profile) => {
+        .then(profile => {
           setUser(profile);
         })
         .catch(() => {
@@ -80,10 +80,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 };
 
-export function useAuth() {
+function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
+};
+
+export {
+  AuthProvider,
+  useAuth
 };
