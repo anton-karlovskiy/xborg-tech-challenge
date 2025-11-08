@@ -16,11 +16,17 @@ declare global {
   }
 }
 
+const STR_GOOGLE_SIGNIN_BUTTON = "google-signin-button";
+
+if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
+  throw new Error("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
+}
+
 function Signin() {
   const router = useRouter();
   const { user, login } = useAuth();
 
-  const handleCredentialResponse = useCallback(async (response: any) => {
+  const googleSignin = useCallback(async (response: any) => {
     try {
       // Decode the JWT token to get user info
       const base64Url = response.credential.split(".")[1];
@@ -39,12 +45,12 @@ function Signin() {
         email: userData.email,
         firstName: userData.given_name,
         lastName: userData.family_name,
-        picture: userData.picture,
+        picture: userData.picture
       });
 
       // Store token and user data
       login(result.access_token, result.user);
-      router.push("/profile");
+      router.push(PAGE_URLS.PROFILE);
     } catch (error) {
       console.error("Login error:", error);
       alert("Failed to sign in. Please try again.");
@@ -68,16 +74,16 @@ function Signin() {
     script.onload = () => {
       if (window.google) {
         window.google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
-          callback: handleCredentialResponse,
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+          callback: googleSignin,
         });
 
         window.google.accounts.id.renderButton(
-          document.getElementById("google-signin-button"),
+          document.getElementById(STR_GOOGLE_SIGNIN_BUTTON),
           {
             theme: "outline",
             size: "large",
-            width: 300,
+            width: 300
           }
         );
       }
@@ -86,7 +92,7 @@ function Signin() {
     return () => {
       document.body.removeChild(script);
     };
-  }, [user, router, handleCredentialResponse]);
+  }, [user, router, googleSignin]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -98,7 +104,7 @@ function Signin() {
           Sign in with your Google account to continue
         </p>
         <div className="flex justify-center">
-          <div id="google-signin-button"></div>
+          <div id={STR_GOOGLE_SIGNIN_BUTTON}></div>
         </div>
       </div>
     </div>
