@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from "@/app/providers";
+import { useAuth } from "@/app/contexts/auth-context";
 import { userApi, UpdateProfileData } from "@/lib/api";
 import { PAGE_URLS } from "@/app/constants";
 
