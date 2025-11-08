@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import {
+  useEffect,
+  useCallback
+} from "react";
 import { useRouter } from "next/navigation";
 
 import { useAuth } from '@/app/contexts/auth-context';
@@ -16,6 +19,37 @@ declare global {
 function Signin() {
   const router = useRouter();
   const { user, login } = useAuth();
+
+  const handleCredentialResponse = useCallback(async (response: any) => {
+    try {
+      // Decode the JWT token to get user info
+      const base64Url = response.credential.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      const jsonPayload = decodeURIComponent(
+        atob(base64)
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
+      );
+      const userData = JSON.parse(jsonPayload);
+
+      // Send to backend
+      const result = await authApi.googleLogin({
+        googleId: userData.sub,
+        email: userData.email,
+        firstName: userData.given_name,
+        lastName: userData.family_name,
+        picture: userData.picture,
+      });
+
+      // Store token and user data
+      login(result.access_token, result.user);
+      router.push("/profile");
+    } catch (error) {
+      console.error("Login error:", error);
+      alert("Failed to sign in. Please try again.");
+    }
+  }, [login, router]);
 
   useEffect(() => {
     // Redirect if already logged in
@@ -52,38 +86,7 @@ function Signin() {
     return () => {
       document.body.removeChild(script);
     };
-  }, [user, router]);
-
-  const handleCredentialResponse = async (response: any) => {
-    try {
-      // Decode the JWT token to get user info
-      const base64Url = response.credential.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-      const jsonPayload = decodeURIComponent(
-        atob(base64)
-          .split("")
-          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-          .join("")
-      );
-      const userData = JSON.parse(jsonPayload);
-
-      // Send to backend
-      const result = await authApi.googleLogin({
-        googleId: userData.sub,
-        email: userData.email,
-        firstName: userData.given_name,
-        lastName: userData.family_name,
-        picture: userData.picture,
-      });
-
-      // Store token and user data
-      login(result.access_token, result.user);
-      router.push("/profile");
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Failed to sign in. Please try again.");
-    }
-  };
+  }, [user, router, handleCredentialResponse]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
