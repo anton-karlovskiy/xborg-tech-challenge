@@ -1,27 +1,29 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '../providers';
-import { userApi, UpdateProfileData } from '@/lib/api';
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+import { useAuth } from "@/app/providers";
+import { userApi, UpdateProfileData } from "@/lib/api";
+import { PAGE_URLS } from "@/app/constants";
 
 export default function ProfilePage() {
   const router = useRouter();
   const { user, loading, logout, refreshUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UpdateProfileData>({
-    firstName: '',
-    lastName: '',
+    firstName: "",
+    lastName: "",
   });
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (!loading && !user) {
-      router.push('/signin');
+      router.push(PAGE_URLS.SIGN_IN);
     } else if (user) {
       setFormData({
-        firstName: user.firstName || '',
-        lastName: user.lastName || '',
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
       });
     }
   }, [user, loading, router]);
@@ -41,8 +43,8 @@ export default function ProfilePage() {
       await refreshUser();
       setIsEditing(false);
     } catch (error) {
-      console.error('Failed to update profile:', error);
-      alert('Failed to update profile. Please try again.');
+      console.error("Failed to update profile:", error);
+      alert("Failed to update profile. Please try again.");
     } finally {
       setSaving(false);
     }
@@ -51,8 +53,8 @@ export default function ProfilePage() {
   const handleCancel = () => {
     if (user) {
       setFormData({
-        firstName: user.firstName || '',
-        lastName: user.lastName || '',
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
       });
     }
     setIsEditing(false);
@@ -122,8 +124,8 @@ export default function ProfilePage() {
                 disabled={!isEditing}
                 className={`w-full px-4 py-2 border border-gray-300 rounded-lg ${
                   isEditing
-                    ? 'bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
-                    : 'bg-gray-50 text-gray-600'
+                    ? "bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    : "bg-gray-50 text-gray-600"
                 }`}
               />
             </div>
@@ -141,8 +143,8 @@ export default function ProfilePage() {
                 disabled={!isEditing}
                 className={`w-full px-4 py-2 border border-gray-300 rounded-lg ${
                   isEditing
-                    ? 'bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500'
-                    : 'bg-gray-50 text-gray-600'
+                    ? "bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+                    : "bg-gray-50 text-gray-600"
                 }`}
               />
             </div>
@@ -170,7 +172,7 @@ export default function ProfilePage() {
                     disabled={saving}
                     className="flex-1 px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors font-medium disabled:opacity-50"
                   >
-                    {saving ? 'Saving...' : 'Save Changes'}
+                    {saving ? "Saving..." : "Save Changes"}
                   </button>
                 </>
               )}
@@ -192,5 +194,4 @@ export default function ProfilePage() {
       </div>
     </div>
   );
-}
-
+};

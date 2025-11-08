@@ -1,9 +1,11 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '../providers';
-import { authApi } from '@/lib/api';
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+import { useAuth } from '@/app/providers';
+import { authApi } from "@/lib/api";
+import { PAGE_URLS } from '@/app/constants';
 
 declare global {
   interface Window {
@@ -18,13 +20,13 @@ export default function SigninPage() {
   useEffect(() => {
     // Redirect if already logged in
     if (user) {
-      router.push('/profile');
+      router.push(PAGE_URLS.PROFILE);
       return;
     }
 
     // Load Google Sign-In script
-    const script = document.createElement('script');
-    script.src = 'https://accounts.google.com/gsi/client';
+    const script = document.createElement("script");
+    script.src = "https://accounts.google.com/gsi/client";
     script.async = true;
     script.defer = true;
     document.body.appendChild(script);
@@ -32,15 +34,15 @@ export default function SigninPage() {
     script.onload = () => {
       if (window.google) {
         window.google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || '',
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
           callback: handleCredentialResponse,
         });
 
         window.google.accounts.id.renderButton(
-          document.getElementById('google-signin-button'),
+          document.getElementById("google-signin-button"),
           {
-            theme: 'outline',
-            size: 'large',
+            theme: "outline",
+            size: "large",
             width: 300,
           }
         );
@@ -55,13 +57,13 @@ export default function SigninPage() {
   const handleCredentialResponse = async (response: any) => {
     try {
       // Decode the JWT token to get user info
-      const base64Url = response.credential.split('.')[1];
-      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const base64Url = response.credential.split(".")[1];
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
       const jsonPayload = decodeURIComponent(
         atob(base64)
-          .split('')
-          .map((c) => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-          .join('')
+          .split("")
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .join("")
       );
       const userData = JSON.parse(jsonPayload);
 
@@ -76,10 +78,10 @@ export default function SigninPage() {
 
       // Store token and user data
       login(result.access_token, result.user);
-      router.push('/profile');
+      router.push("/profile");
     } catch (error) {
-      console.error('Login error:', error);
-      alert('Failed to sign in. Please try again.');
+      console.error("Login error:", error);
+      alert("Failed to sign in. Please try again.");
     }
   };
 
@@ -98,5 +100,4 @@ export default function SigninPage() {
       </div>
     </div>
   );
-}
-
+};

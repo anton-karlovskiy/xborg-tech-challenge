@@ -1,6 +1,7 @@
-import { redirect } from 'next/navigation'
+import { redirect } from "next/navigation";
+
+import { PAGE_URLS } from "@/app/constants";
 
 export default function Home() {
-  redirect('/signin')
-}
-
+  redirect(PAGE_URLS.SIGN_IN)
+};

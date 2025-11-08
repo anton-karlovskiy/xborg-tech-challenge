@@ -1,16 +1,16 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
   headers: {
-    'Content-Type': 'application/json',
+    "Content-Type": "application/json",
   },
 });
 
 // Add token to requests
 api.interceptors.request.use((config) => {
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('token');
+  if (typeof window !== "undefined") {
+    const token = localStorage.getItem("token");
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -27,7 +27,7 @@ export interface GoogleLoginResponse {
     lastName?: string;
     picture?: string;
   };
-}
+};
 
 export interface UserProfile {
   id: string;
@@ -37,12 +37,12 @@ export interface UserProfile {
   picture?: string;
   createdAt: string;
   updatedAt: string;
-}
+};
 
 export interface UpdateProfileData {
   firstName?: string;
   lastName?: string;
-}
+};
 
 export const authApi = {
   googleLogin: async (data: {
@@ -52,21 +52,20 @@ export const authApi = {
     lastName?: string;
     picture?: string;
   }): Promise<GoogleLoginResponse> => {
-    const response = await api.post<GoogleLoginResponse>('/auth/login/google', data);
+    const response = await api.post<GoogleLoginResponse>("/auth/login/google", data);
     return response.data;
   },
 };
 
 export const userApi = {
   getProfile: async (): Promise<UserProfile> => {
-    const response = await api.get<UserProfile>('/user/profile');
+    const response = await api.get<UserProfile>("/user/profile");
     return response.data;
   },
   updateProfile: async (data: UpdateProfileData): Promise<UserProfile> => {
-    const response = await api.put<UserProfile>('/user/profile', data);
+    const response = await api.put<UserProfile>("/user/profile", data);
     return response.data;
   },
 };
 
 export default api;
-
