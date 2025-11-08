@@ -13,7 +13,7 @@ declare global {
   }
 }
 
-export default function SigninPage() {
+function Signin() {
   const router = useRouter();
   const { user, login } = useAuth();
 
@@ -101,3 +101,5 @@ export default function SigninPage() {
     </div>
   );
 };
+
+export default Signin;
