@@ -69,7 +69,7 @@ const userApi = {
 
     return response.data;
   },
-  updateProfile: async (data: UpdateProfileData): Promise<UserProfile> => {
+  editProfile: async (data: UpdateProfileData): Promise<UserProfile> => {
     const response = await api.put<UserProfile>(API_END_POINTS.USER_PROFILE, data);
 
     return response.data;

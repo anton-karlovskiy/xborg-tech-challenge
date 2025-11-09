@@ -40,7 +40,7 @@ function Profile() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      await userApi.updateProfile(formData);
+      await userApi.editProfile(formData);
       await refreshUser();
       setIsEditing(false);
     } catch (error) {
