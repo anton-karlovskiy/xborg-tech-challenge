@@ -8,7 +8,7 @@ import { useAuth } from "@/app/contexts/auth-context";
 import { userApi, UpdateProfileData } from "@/lib/api";
 import { PAGE_URLS } from "@/app/constants";
 
-export default function ProfilePage() {
+function Profile() {
   const router = useRouter();
   const { user, loading, logout, refreshUser } = useAuth();
   const [isEditing, setIsEditing] = useState(false);
@@ -29,11 +29,11 @@ export default function ProfilePage() {
     }
   }, [user, loading, router]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = event.target;
+    setFormData(prev => ({
       ...prev,
-      [name]: value,
+      [name]: value
     }));
   };
 
@@ -199,3 +199,5 @@ export default function ProfilePage() {
     </div>
   );
 };
+
+export default Profile;
