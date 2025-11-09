@@ -6,7 +6,6 @@ import Image from "next/image";
 
 import { useAuth } from "@/app/contexts/auth-context";
 import { userApi, UpdateProfileData } from "@/lib/api";
-import { PAGE_URLS } from "@/app/constants";
 
 function Profile() {
   const router = useRouter();
@@ -17,6 +16,10 @@ function Profile() {
     user,
     logout
   } = useAuth();
+
+  if (!user) {
+    throw new Error("User must be authenticated to access this page. This error should not occur as ProtectedLayout should handle authentication.");
+  }
   // ninja focus touch >
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UpdateProfileData>({
@@ -37,14 +40,10 @@ function Profile() {
   //   }
   // }, [user, loading, router]);
   useEffect(() => {
-    if (!user) {
-      router.push(PAGE_URLS.SIGN_IN);
-    } else {
-      setFormData({
-        firstName: user.firstName || "",
-        lastName: user.lastName || "",
-      });
-    }
+    setFormData({
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+    });
   }, [user, router]);
   // ninja focus touch >
 
@@ -90,9 +89,6 @@ function Profile() {
   //     </div>
   //   );
   // }
-  if (!user) {
-    return null;
-  }
   // ninja focus touch >
 
   return (
