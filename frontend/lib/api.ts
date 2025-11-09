@@ -6,6 +6,11 @@ if (!process.env.NEXT_PUBLIC_API_URL) {
   throw new Error("NEXT_PUBLIC_API_URL is not set");
 }
 
+const API_END_POINTS = {
+  AUTH_LOGIN_GOOGLE: "/auth/login/google",
+  USER_PROFILE: "/user/profile"
+};
+
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
@@ -52,7 +57,7 @@ const authApi = {
     lastName?: string;
     picture?: string;
   }): Promise<GoogleLoginResponse> => {
-    const response = await api.post<GoogleLoginResponse>("/auth/login/google", data);
+    const response = await api.post<GoogleLoginResponse>(API_END_POINTS.AUTH_LOGIN_GOOGLE, data);
 
     return response.data;
   }
@@ -60,12 +65,12 @@ const authApi = {
 
 const userApi = {
   getProfile: async (): Promise<UserProfile> => {
-    const response = await api.get<UserProfile>("/user/profile");
+    const response = await api.get<UserProfile>(API_END_POINTS.USER_PROFILE);
 
     return response.data;
   },
   updateProfile: async (data: UpdateProfileData): Promise<UserProfile> => {
-    const response = await api.put<UserProfile>("/user/profile", data);
+    const response = await api.put<UserProfile>(API_END_POINTS.USER_PROFILE, data);
 
     return response.data;
   }
