@@ -10,7 +10,14 @@ import { PAGE_URLS } from "@/app/constants";
 
 function Profile() {
   const router = useRouter();
-  const { user, loading, logout, refreshUser } = useAuth();
+  // ninja focus touch <
+  const {
+    // loading,
+    // refreshUser,
+    user,
+    logout
+  } = useAuth();
+  // ninja focus touch >
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UpdateProfileData>({
     firstName: "",
@@ -18,16 +25,28 @@ function Profile() {
   });
   const [saving, setSaving] = useState(false);
 
+  // ninja focus touch <
+  // useEffect(() => {
+  //   if (!loading && !user) {
+  //     router.push(PAGE_URLS.SIGN_IN);
+  //   } else if (user) {
+  //     setFormData({
+  //       firstName: user.firstName || "",
+  //       lastName: user.lastName || "",
+  //     });
+  //   }
+  // }, [user, loading, router]);
   useEffect(() => {
-    if (!loading && !user) {
+    if (!user) {
       router.push(PAGE_URLS.SIGN_IN);
-    } else if (user) {
+    } else {
       setFormData({
         firstName: user.firstName || "",
         lastName: user.lastName || "",
       });
     }
-  }, [user, loading, router]);
+  }, [user, router]);
+  // ninja focus touch >
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -40,8 +59,10 @@ function Profile() {
   const handleSave = async () => {
     setSaving(true);
     try {
+      // ninja focus touch <
       await userApi.editProfile(formData);
-      await refreshUser();
+      // await refreshUser();
+      // ninja focus touch >
       setIsEditing(false);
     } catch (error) {
       console.error("Failed to update profile:", error);
@@ -61,17 +82,18 @@ function Profile() {
     setIsEditing(false);
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
-      </div>
-    );
-  }
-
+  // ninja focus touch <
+  // if (loading) {
+  //   return (
+  //     <div className="min-h-screen flex items-center justify-center">
+  //       <div className="text-xl">Loading...</div>
+  //     </div>
+  //   );
+  // }
   if (!user) {
     return null;
   }
+  // ninja focus touch >
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
