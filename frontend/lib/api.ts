@@ -2,15 +2,19 @@ import axios from "axios";
 
 import { LOCAL_STORAGE_KEYS } from "@/app/constants";
 
+if (!process.env.NEXT_PUBLIC_API_URL) {
+  throw new Error("NEXT_PUBLIC_API_URL is not set");
+}
+
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
-    "Content-Type": "application/json",
-  },
+    "Content-Type": "application/json"
+  }
 });
 
 // Add token to requests
-api.interceptors.request.use((config) => {
+api.interceptors.request.use(config => {
   if (typeof window !== "undefined") {
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
     if (token) {
@@ -20,12 +24,12 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export interface GoogleLoginResponse {
+interface GoogleLoginResponse {
   access_token: string;
   user: UserProfile;
 };
 
-export interface UserProfile {
+interface UserProfile {
   id: string;
   email: string;
   firstName?: string;
@@ -35,12 +39,12 @@ export interface UserProfile {
   updatedAt: string;
 };
 
-export interface UpdateProfileData {
+interface UpdateProfileData {
   firstName?: string;
   lastName?: string;
 };
 
-export const authApi = {
+const authApi = {
   googleLogin: async (data: {
     googleId: string;
     email: string;
@@ -49,19 +53,32 @@ export const authApi = {
     picture?: string;
   }): Promise<GoogleLoginResponse> => {
     const response = await api.post<GoogleLoginResponse>("/auth/login/google", data);
+
     return response.data;
-  },
+  }
 };
 
-export const userApi = {
+const userApi = {
   getProfile: async (): Promise<UserProfile> => {
     const response = await api.get<UserProfile>("/user/profile");
+
     return response.data;
   },
   updateProfile: async (data: UpdateProfileData): Promise<UserProfile> => {
     const response = await api.put<UserProfile>("/user/profile", data);
+
     return response.data;
-  },
+  }
+};
+
+export type {
+  UserProfile,
+  UpdateProfileData
+};
+
+export {
+  authApi,
+  userApi
 };
 
 export default api;
