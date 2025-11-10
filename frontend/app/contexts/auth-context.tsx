@@ -86,15 +86,19 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (error && hasToken && !errorHandledRef.current) {
       errorHandledRef.current = true;
+
       if (typeof window !== "undefined") {
         localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
       }
+
       // Use startTransition to mark state update as non-urgent
       startTransition(() => {
         setHasToken(false);
       });
+
       queryClient.removeQueries({ queryKey: ["user", "profile"] });
     }
+    
     // Reset error handled flag when error clears
     if (!error) {
       errorHandledRef.current = false;

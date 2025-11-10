@@ -8,8 +8,8 @@ import { useAuth } from "@/app/contexts/auth-context";
 import { userApi, UpdateProfileData } from "@/lib/api";
 
 function Profile() {
-  
   const queryClient = useQueryClient();
+  
   const {
     user,
     logout
