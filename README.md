@@ -17,6 +17,7 @@ A full-stack application with Google OAuth authentication and user profile manag
 - **Next.js 14** - React framework with App Router
 - **TypeScript** - Type safety
 - **TailwindCSS** - Utility-first CSS framework
+- **React Query** - Data fetching and state management
 
 ## Prerequisites
 
