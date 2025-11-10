@@ -20,7 +20,8 @@ import {
 } from "@/lib/api";
 import {
   PAGE_URLS,
-  LOCAL_STORAGE_KEYS
+  LOCAL_STORAGE_KEYS,
+  QUERY_KEYS
 } from "@/app/constants";
 
 /**
@@ -75,7 +76,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     isLoading,
     error
   } = useQuery({
-    queryKey: ["user", "profile"],
+    queryKey: QUERY_KEYS.USER_PROFILE,
     queryFn: () => userApi.getProfile(),
     enabled: hasToken, // Only run query if token exists
     retry: false,
@@ -96,7 +97,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
         setHasToken(false);
       });
 
-      queryClient.removeQueries({ queryKey: ["user", "profile"] });
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.USER_PROFILE });
     }
     
     // Reset error handled flag when error clears
@@ -125,13 +126,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, token);
     setHasToken(true);
     // Set the query data directly to avoid refetch
-    queryClient.setQueryData(["user", "profile"], userData);
+    queryClient.setQueryData(QUERY_KEYS.USER_PROFILE, userData);
   };
 
   const logout = () => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
     setHasToken(false);
-    queryClient.removeQueries({ queryKey: ["user", "profile"] });
+    queryClient.removeQueries({ queryKey: QUERY_KEYS.USER_PROFILE });
     router.push(PAGE_URLS.SIGN_IN);
   };
 

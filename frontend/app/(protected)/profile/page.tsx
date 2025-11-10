@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useAuth } from "@/app/contexts/auth-context";
+import { QUERY_KEYS } from "@/app/constants";
 import { userApi, UpdateProfileData } from "@/lib/api";
 
 function Profile() {
@@ -39,7 +40,7 @@ function Profile() {
     try {
       const updatedProfile = await userApi.editProfile(formData);
       // Invalidate and refetch the user profile query
-      queryClient.setQueryData(["user", "profile"], updatedProfile);
+      queryClient.setQueryData(QUERY_KEYS.USER_PROFILE, updatedProfile);
       setIsEditing(false);
     } catch (error) {
       console.error("Failed to update profile:", error);
