@@ -40,13 +40,11 @@ import {
  * profile or `null`, without worrying about loading states or token drift.
  */
 
-interface AuthContextType {
+const AuthContext = createContext<{
   user: UserProfile | null;
   login: (token: string, user: UserProfile) => void;
   logout: () => void;
-}
-
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+} | undefined>(undefined);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
