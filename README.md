@@ -124,31 +124,6 @@ The frontend will run on `http://localhost:3000`
   - Body: `{ firstName?, lastName? }`
   - Returns: Updated user profile object
 
-## Project Structure
-
-```
-.
-├── backend/
-│   ├── src/
-│   │   ├── auth/          # Authentication module
-│   │   ├── user/          # User module
-│   │   ├── app.module.ts  # Root module
-│   │   └── main.ts        # Application entry point
-│   ├── .env.example       # Environment variables template
-│   └── package.json
-├── frontend/
-│   ├── app/
-│   │   ├── signin/        # Sign in page
-│   │   ├── profile/       # Profile page
-│   │   ├── providers.tsx # Auth context provider
-│   │   └── layout.tsx     # Root layout
-│   ├── lib/
-│   │   └── api.ts         # API client
-│   ├── .env.local.example # Environment variables template
-│   └── package.json
-└── README.md
-```
-
 ## Environment Variables
 
 ### Backend (.env)

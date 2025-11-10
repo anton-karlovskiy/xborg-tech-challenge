@@ -105,16 +105,6 @@ function Profile() {
     setIsEditing(false);
   };
 
-  // Close editing mode on successful update
-  // useEffect(() => {
-  //   if (state.success) {
-  //     const timer = setTimeout(() => {
-  //       handleCancel();
-  //     }, 1500); // Close after showing success message for 1.5 seconds
-  //     return () => clearTimeout(timer);
-  //   }
-  // }, [state.success]);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
@@ -157,7 +147,6 @@ function Profile() {
               />
             </div>
 
-            {/* Profile Form or Read-only View */}
             <form action={isEditing ? formAction : undefined} className="space-y-6">
               {/* First Name */}
               <div>
@@ -193,13 +182,6 @@ function Profile() {
                   {state.error}
                 </div>
               )}
-
-              {/* Success Message */}
-              {/* {isEditing && state.success && (
-                <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
-                  Profile updated successfully!
-                </div>
-              )} */}
 
               {/* Action Buttons */}
               <div className="flex gap-4 pt-4">
