@@ -44,7 +44,7 @@ interface UserProfile {
   updatedAt: string;
 };
 
-interface UpdateProfileData {
+interface UpdateUserProfile {
   firstName?: string;
   lastName?: string;
 };
@@ -69,7 +69,7 @@ const userApi = {
 
     return response.data;
   },
-  editProfile: async (data: UpdateProfileData): Promise<UserProfile> => {
+  editProfile: async (data: UpdateUserProfile): Promise<UserProfile> => {
     const response = await api.put<UserProfile>(API_END_POINTS.USER_PROFILE, data);
 
     return response.data;
@@ -78,7 +78,7 @@ const userApi = {
 
 export type {
   UserProfile,
-  UpdateProfileData
+  UpdateUserProfile
 };
 
 export {
