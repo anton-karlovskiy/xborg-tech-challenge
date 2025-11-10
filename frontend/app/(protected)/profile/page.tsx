@@ -52,6 +52,9 @@ interface FormState {
   success: boolean;
 }
 
+const FIRST_NAME_FIELD = "firstName";
+const LAST_NAME_FIELD = "lastName";
+
 function Profile() {
   const { user, logout } = useAuth();
 
@@ -80,8 +83,8 @@ function Profile() {
   ): Promise<FormState> => {
     try {
       const updateData: UpdateUserProfile = {
-        firstName: String(formData.get("firstName")) || undefined,
-        lastName: String(formData.get("lastName")) || undefined
+        firstName: String(formData.get(FIRST_NAME_FIELD)) || undefined,
+        lastName: String(formData.get(LAST_NAME_FIELD)) || undefined
       };
 
       await updateProfileMutation.mutateAsync(updateData);
@@ -155,7 +158,7 @@ function Profile() {
                 </label>
                 <input
                   type="text"
-                  name="firstName"
+                  name={FIRST_NAME_FIELD}
                   defaultValue={user.firstName || ""}
                   disabled={!isEditing}
                   className={`w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 ${isEditing ? "bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" : "bg-gray-50"}`}
@@ -169,7 +172,7 @@ function Profile() {
                 </label>
                 <input
                   type="text"
-                  name="lastName"
+                  name={LAST_NAME_FIELD}
                   defaultValue={user.lastName || ""}
                   disabled={!isEditing}
                   className={`w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 ${isEditing ? "bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" : "bg-gray-50"}`}
