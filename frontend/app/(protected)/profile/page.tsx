@@ -6,7 +6,10 @@ import {
 } from "react";
 import { useFormStatus } from "react-dom";
 import Image from "next/image";
-import { useQueryClient } from "@tanstack/react-query";
+import {
+  useMutation,
+  useQueryClient
+} from "@tanstack/react-query";
 
 import { useAuth } from "@/app/contexts/auth-context";
 import { QUERY_KEYS } from "@/app/constants";
@@ -50,10 +53,7 @@ interface FormState {
 }
 
 function Profile() {
-  const {
-    user,
-    logout
-  } = useAuth();
+  const { user, logout } = useAuth();
 
   if (!user) {
     throw new Error("User must be authenticated to access this page. This error should not occur as ProtectedLayout should handle authentication.");
@@ -61,6 +61,18 @@ function Profile() {
 
   const queryClient = useQueryClient();
   const [isEditing, setIsEditing] = useState(false);
+
+  const updateProfileMutation = useMutation({
+    mutationFn: async (updateData: UpdateUserProfile) => {
+      // Testing delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+
+      return userApi.editProfile(updateData)
+    },
+    onSuccess: (updatedProfile) => {
+      queryClient.setQueryData(QUERY_KEYS.USER_PROFILE, updatedProfile);
+    }
+  });
 
   const updateProfile = async (
     prevState: FormState,
@@ -72,12 +84,7 @@ function Profile() {
         lastName: String(formData.get("lastName")) || undefined
       };
 
-      const updatedProfile = await userApi.editProfile(updateData);
-      
-      // Testing delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      queryClient.setQueryData(QUERY_KEYS.USER_PROFILE, updatedProfile);
+      await updateProfileMutation.mutateAsync(updateData);
       
       return { error: null, success: true };
     } catch (error) {
