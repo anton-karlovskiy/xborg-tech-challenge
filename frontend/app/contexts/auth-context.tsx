@@ -35,14 +35,20 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const queryClient = useQueryClient();
   const errorHandledRef = useRef(false);
-  
-  // Lazy initialization to check token on mount
-  const [hasToken, setHasToken] = useState<boolean>(() => {
-    if (typeof window !== "undefined") {
-      return !!localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
+
+  const [hasToken, setHasToken] = useState(false);
+
+  // Check for token after mount to keep SSR markup consistent
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
     }
-    return false;
-  });
+
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
+    startTransition(() => {
+      setHasToken(!!token);
+    });
+  }, []);
 
   // Use react-query to fetch user profile
   const {
