@@ -10,6 +10,10 @@ import { useAuth } from '@/app/contexts/auth-context';
 import { authApi } from "@/lib/api";
 import { PAGE_URLS } from '@/app/constants';
 
+if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
+  throw new Error("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
+}
+
 declare global {
   interface Window {
     google: any;
@@ -18,26 +22,25 @@ declare global {
 
 const STR_GOOGLE_SIGNIN_BUTTON = "google-signin-button";
 
-if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
-  throw new Error("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
-}
-
 function Signin() {
   const router = useRouter();
+
   const { user, login } = useAuth();
 
-  const googleSignin = useCallback(async (response: any) => {
+  const googleSigninCallback = useCallback(async (response: any) => {
     try {
-      // Decode the JWT token to get user info
-      const base64Url = response.credential.split(".")[1];
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+      // Decode the Google JWT token payload to extract user info
+      // JWT format: header.payload.signature - we need the middle part (payload)
+      // The payload is base64url-encoded JSON containing user data from Google
+      const base64Url = response.credential.split(".")[1]; // Extract payload (middle part)
+      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Convert base64url to base64
       const jsonPayload = decodeURIComponent(
-        atob(base64)
+        atob(base64) // Decode base64 to string
           .split("")
-          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)) // Convert to URL-encoded hex
           .join("")
       );
-      const userData = JSON.parse(jsonPayload);
+      const userData = JSON.parse(jsonPayload); // Parse JSON to get user object
 
       // Send to backend
       const result = await authApi.googleLogin({
@@ -49,6 +52,8 @@ function Signin() {
       });
 
       // Store token and user data
+      // Note: result.access_token is our backend's JWT (different from Google's JWT)
+      // This token is used to authenticate future API requests to our backend
       login(result.access_token, result.user);
       router.push(PAGE_URLS.PROFILE);
     } catch (error) {
@@ -75,7 +80,7 @@ function Signin() {
       if (window.google) {
         window.google.accounts.id.initialize({
           client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
-          callback: googleSignin
+          callback: googleSigninCallback
         });
 
         window.google.accounts.id.renderButton(
@@ -92,7 +97,7 @@ function Signin() {
     return () => {
       document.body.removeChild(script);
     };
-  }, [user, router, googleSignin]);
+  }, [user, router, googleSigninCallback]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
