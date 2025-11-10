@@ -2,7 +2,6 @@
 
 import {
   useState,
-  useEffect,
   useActionState
 } from "react";
 import { useFormStatus } from "react-dom";
@@ -13,8 +12,7 @@ import { useAuth } from "@/app/contexts/auth-context";
 import { QUERY_KEYS } from "@/app/constants";
 import {
   userApi,
-  UpdateUserProfile,
-  UserProfile
+  UpdateUserProfile
 } from "@/lib/api";
 
 function SubmitButton() {
@@ -46,19 +44,24 @@ function CancelButton({ onCancel }: { onCancel: () => void }) {
   );
 }
 
-interface ProfileFormProps {
-  user: UserProfile;
-  onCancel: () => void;
-}
-
 interface FormState {
   error: string | null;
   success: boolean;
 }
 
-function ProfileForm({ user, onCancel }: ProfileFormProps) {
+function Profile() {
+  const {
+    user,
+    logout
+  } = useAuth();
+
+  if (!user) {
+    throw new Error("User must be authenticated to access this page. This error should not occur as ProtectedLayout should handle authentication.");
+  }
+
   const queryClient = useQueryClient();
-  
+  const [isEditing, setIsEditing] = useState(false);
+
   const updateProfile = async (
     prevState: FormState,
     formData: FormData
@@ -93,78 +96,21 @@ function ProfileForm({ user, onCancel }: ProfileFormProps) {
     success: false
   });
 
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+
+  // ninja focus touch <
   // Close editing mode on successful update
-  useEffect(() => {
-    if (state.success) {
-      const timer = setTimeout(() => {
-        onCancel();
-      }, 1500); // Close after showing success message for 1.5 seconds
-      return () => clearTimeout(timer);
-    }
-  }, [state.success, onCancel]);
-
-  return (
-    <form action={formAction} className="space-y-6">
-      {/* First Name */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          First Name
-        </label>
-        <input
-          type="text"
-          name="firstName"
-          defaultValue={user.firstName || ""}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-        />
-      </div>
-
-      {/* Last Name */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
-          Last Name
-        </label>
-        <input
-          type="text"
-          name="lastName"
-          defaultValue={user.lastName || ""}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
-        />
-      </div>
-
-      {/* Error Message */}
-      {state.error && (
-        <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-          {state.error}
-        </div>
-      )}
-
-      {/* Success Message */}
-      {state.success && (
-        <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
-          Profile updated successfully!
-        </div>
-      )}
-
-      {/* Action Buttons */}
-      <div className="flex gap-4 pt-4">
-        <CancelButton onCancel={onCancel} />
-        <SubmitButton />
-      </div>
-    </form>
-  );
-}
-
-function Profile() {
-  const {
-    user,
-    logout
-  } = useAuth();
-
-  if (!user) {
-    throw new Error("User must be authenticated to access this page. This error should not occur as ProtectedLayout should handle authentication.");
-  }
-
-  const [isEditing, setIsEditing] = useState(false);
+  // useEffect(() => {
+  //   if (state.success) {
+  //     const timer = setTimeout(() => {
+  //       handleCancel();
+  //     }, 1500); // Close after showing success message for 1.5 seconds
+  //     return () => clearTimeout(timer);
+  //   }
+  // }, [state.success]);
+  // ninja focus touch >
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -209,47 +155,68 @@ function Profile() {
             </div>
 
             {/* Profile Form or Read-only View */}
-            {isEditing ? (
-              <ProfileForm user={user} onCancel={() => setIsEditing(false)} />
-            ) : (
-              <>
-                {/* First Name (read-only) */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    First Name
-                  </label>
-                  <input
-                    type="text"
-                    value={user.firstName || ""}
-                    disabled
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-gray-50"
-                  />
-                </div>
+            <form action={isEditing ? formAction : undefined} className="space-y-6">
+              {/* First Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  name="firstName"
+                  defaultValue={user.firstName || ""}
+                  disabled={!isEditing}
+                  className={`w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 ${isEditing ? "bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" : "bg-gray-50"}`}
+                />
+              </div>
 
-                {/* Last Name (read-only) */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Last Name
-                  </label>
-                  <input
-                    type="text"
-                    value={user.lastName || ""}
-                    disabled
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
-                  />
-                </div>
+              {/* Last Name */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  name="lastName"
+                  defaultValue={user.lastName || ""}
+                  disabled={!isEditing}
+                  className={`w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 ${isEditing ? "bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" : "bg-gray-50"}`}
+                />
+              </div>
 
-                {/* Edit Button */}
-                <div className="flex gap-4 pt-4">
+              {/* Error Message */}
+              {isEditing && state.error && (
+                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                  {state.error}
+                </div>
+              )}
+
+              {/* ninja focus touch < */}
+              {/* Success Message */}
+              {/* {isEditing && state.success && (
+                <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
+                  Profile updated successfully!
+                </div>
+              )} */}
+              {/* ninja focus touch > */}
+
+              {/* Action Buttons */}
+              <div className="flex gap-4 pt-4">
+                {isEditing ? (
+                  <>
+                    <CancelButton onCancel={handleCancel} />
+                    <SubmitButton />
+                  </>
+                ) : (
                   <button
                     onClick={() => setIsEditing(true)}
                     className="flex-1 px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors font-medium"
                   >
                     Edit Profile
                   </button>
-                </div>
-              </>
-            )}
+                )}
+              </div>
+            </form>
 
             {/* Account Info */}
             <div className="pt-6 border-t border-gray-200">
