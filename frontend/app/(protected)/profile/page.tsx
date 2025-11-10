@@ -3,9 +3,7 @@
 import {
   useState,
   useEffect,
-  useOptimistic,
-  useActionState,
-  startTransition
+  useActionState
 } from "react";
 import { useFormStatus } from "react-dom";
 import Image from "next/image";
@@ -72,6 +70,12 @@ function ProfileForm({ user, onCancel }: ProfileFormProps) {
       };
 
       const updatedProfile = await userApi.editProfile(updateData);
+      
+      // ninja focus touch <
+      // Testing delay
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      // ninja focus touch >
+      
       queryClient.setQueryData(QUERY_KEYS.USER_PROFILE, updatedProfile);
       
       return { error: null, success: true };
@@ -89,16 +93,6 @@ function ProfileForm({ user, onCancel }: ProfileFormProps) {
     success: false
   });
 
-  const [optimisticUser, updateOptimisticUser] = useOptimistic(
-    user,
-    (state: UserProfile, newData: UpdateUserProfile) => ({
-      ...state,
-      firstName: newData.firstName ?? state.firstName,
-      lastName: newData.lastName ?? state.lastName,
-      updatedAt: new Date().toISOString()
-    })
-  );
-
   // Close editing mode on successful update
   useEffect(() => {
     if (state.success) {
@@ -109,21 +103,8 @@ function ProfileForm({ user, onCancel }: ProfileFormProps) {
     }
   }, [state.success, onCancel]);
 
-  const handleSubmit = (formData: FormData) => {
-    const updateData: UpdateUserProfile = {
-      firstName: formData.get("firstName") as string || undefined,
-      lastName: formData.get("lastName") as string || undefined,
-    };
-    
-    startTransition(() => {
-      updateOptimisticUser(updateData);
-    });
-    
-    formAction(formData);
-  };
-
   return (
-    <form action={handleSubmit} className="space-y-6">
+    <form action={formAction} className="space-y-6">
       {/* First Name */}
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -132,8 +113,8 @@ function ProfileForm({ user, onCancel }: ProfileFormProps) {
         <input
           type="text"
           name="firstName"
-          defaultValue={optimisticUser.firstName || ""}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          defaultValue={user.firstName || ""}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
         />
       </div>
 
@@ -145,8 +126,8 @@ function ProfileForm({ user, onCancel }: ProfileFormProps) {
         <input
           type="text"
           name="lastName"
-          defaultValue={optimisticUser.lastName || ""}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          defaultValue={user.lastName || ""}
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
         />
       </div>
 
@@ -184,10 +165,6 @@ function Profile() {
   }
 
   const [isEditing, setIsEditing] = useState(false);
-
-  const handleCancel = () => {
-    setIsEditing(false);
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -227,13 +204,13 @@ function Profile() {
                 type="email"
                 value={user.email}
                 disabled
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-gray-50"
               />
             </div>
 
             {/* Profile Form or Read-only View */}
             {isEditing ? (
-              <ProfileForm user={user} onCancel={handleCancel} />
+              <ProfileForm user={user} onCancel={() => setIsEditing(false)} />
             ) : (
               <>
                 {/* First Name (read-only) */}
@@ -245,7 +222,7 @@ function Profile() {
                     type="text"
                     value={user.firstName || ""}
                     disabled
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-50 text-gray-600"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-gray-50"
                   />
                 </div>
 
