@@ -74,10 +74,8 @@ function Profile() {
 
       const updatedProfile = await userApi.editProfile(updateData);
       
-      // ninja focus touch <
       // Testing delay
       await new Promise(resolve => setTimeout(resolve, 1000));
-      // ninja focus touch >
       
       queryClient.setQueryData(QUERY_KEYS.USER_PROFILE, updatedProfile);
       
@@ -100,7 +98,6 @@ function Profile() {
     setIsEditing(false);
   };
 
-  // ninja focus touch <
   // Close editing mode on successful update
   // useEffect(() => {
   //   if (state.success) {
@@ -110,7 +107,6 @@ function Profile() {
   //     return () => clearTimeout(timer);
   //   }
   // }, [state.success]);
-  // ninja focus touch >
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -191,14 +187,12 @@ function Profile() {
                 </div>
               )}
 
-              {/* ninja focus touch < */}
               {/* Success Message */}
               {/* {isEditing && state.success && (
                 <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700 text-sm">
                   Profile updated successfully!
                 </div>
               )} */}
-              {/* ninja focus touch > */}
 
               {/* Action Buttons */}
               <div className="flex gap-4 pt-4">
