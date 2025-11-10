@@ -1,18 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Image from "next/image";
+import { useQueryClient } from "@tanstack/react-query";
 
 import { useAuth } from "@/app/contexts/auth-context";
 import { userApi, UpdateProfileData } from "@/lib/api";
 
 function Profile() {
-  const router = useRouter();
-  // ninja focus touch <
+  
+  const queryClient = useQueryClient();
   const {
-    // loading,
-    // refreshUser,
     user,
     logout
   } = useAuth();
@@ -20,32 +18,13 @@ function Profile() {
   if (!user) {
     throw new Error("User must be authenticated to access this page. This error should not occur as ProtectedLayout should handle authentication.");
   }
-  // ninja focus touch >
+
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState<UpdateProfileData>({
-    firstName: "",
-    lastName: "",
+    firstName: user.firstName || "",
+    lastName: user.lastName || ""
   });
   const [saving, setSaving] = useState(false);
-
-  // ninja focus touch <
-  // useEffect(() => {
-  //   if (!loading && !user) {
-  //     router.push(PAGE_URLS.SIGN_IN);
-  //   } else if (user) {
-  //     setFormData({
-  //       firstName: user.firstName || "",
-  //       lastName: user.lastName || "",
-  //     });
-  //   }
-  // }, [user, loading, router]);
-  useEffect(() => {
-    setFormData({
-      firstName: user.firstName || "",
-      lastName: user.lastName || "",
-    });
-  }, [user, router]);
-  // ninja focus touch >
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -58,10 +37,9 @@ function Profile() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      // ninja focus touch <
-      await userApi.editProfile(formData);
-      // await refreshUser();
-      // ninja focus touch >
+      const updatedProfile = await userApi.editProfile(formData);
+      // Invalidate and refetch the user profile query
+      queryClient.setQueryData(["user", "profile"], updatedProfile);
       setIsEditing(false);
     } catch (error) {
       console.error("Failed to update profile:", error);
@@ -75,21 +53,11 @@ function Profile() {
     if (user) {
       setFormData({
         firstName: user.firstName || "",
-        lastName: user.lastName || "",
+        lastName: user.lastName || ""
       });
     }
     setIsEditing(false);
   };
-
-  // ninja focus touch <
-  // if (loading) {
-  //   return (
-  //     <div className="min-h-screen flex items-center justify-center">
-  //       <div className="text-xl">Loading...</div>
-  //     </div>
-  //   );
-  // }
-  // ninja focus touch >
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">

@@ -28,7 +28,7 @@ function ProtectedLayout({
     }
   }, [user, router]);
 
-  // Show nothing while redirecting (or you could show a loading spinner)
+  // Show nothing while redirecting
   if (!user) {
     return null;
   }
