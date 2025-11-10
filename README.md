@@ -2,6 +2,8 @@
 
 A full-stack application with Google OAuth authentication and user profile management.
 
+> 📄 [View Challenge Details](./Full%20Stack%20Engineer%20Technical%20Challenge.pdf)
+
 ## Tech Stack
 
 ### Backend
