@@ -20,6 +20,7 @@ function ProtectedLayout({
   children: React.ReactNode;
 }) {
   const { user } = useAuth();
+  
   const router = useRouter();
 
   useEffect(() => {

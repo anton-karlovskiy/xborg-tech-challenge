@@ -23,6 +23,22 @@ import {
   LOCAL_STORAGE_KEYS
 } from "@/app/constants";
 
+/**
+ * AuthProvider adopts the "render authenticated vs unauthenticated trees"
+ * pattern popularized by Kent C. Dodds' article on React authentication
+ * (https://kentcdodds.com/blog/authentication-in-react-applications).
+ *
+ * The provider:
+ * - gates rendering until it knows whether a persisted token exists
+ * - hydrates the user profile with React Query when a token is present
+ * - clears invalid tokens eagerly, keeping the rest of the app isolated
+ * - exposes imperative `login`/`logout` helpers that keep localStorage and
+ *   the React Query cache in sync
+ *
+ * Downstream components can safely assume that `user` is either a factual
+ * profile or `null`, without worrying about loading states or token drift.
+ */
+
 interface AuthContextType {
   user: UserProfile | null;
   login: (token: string, user: UserProfile) => void;
@@ -38,7 +54,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const [hasToken, setHasToken] = useState(false);
 
-  // Check for token after mount to keep SSR markup consistent
+  // Detect any persisted token after mount so the SSR markup stays consistent
+  // with the initial client render. This mirrors the "delay rendering until
+  // auth status is known" approach from the referenced article.
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
@@ -50,7 +68,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
-  // Use react-query to fetch user profile
+  // Run the guarded React Query request only when a token exists. Until then,
+  // the rest of the app is held back by the loading state returned below.
   const {
     data: user,
     isLoading,
