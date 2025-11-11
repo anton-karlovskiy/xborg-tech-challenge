@@ -26,7 +26,7 @@ import {
   Card,
   Avatar,
   Alert,
-  PageHeader
+  CardHeader
 } from "@/app/components";
 // ninja focus touch >
 
@@ -137,7 +137,7 @@ function Profile() {
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         <Card className="space-y-8">
-          <PageHeader
+          <CardHeader
             title="Profile"
             action={
               <Button

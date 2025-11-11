@@ -10,7 +10,7 @@ import { useAuth } from '@/app/contexts/auth-context';
 import { authApi } from "@/lib/api";
 import { PAGE_URLS } from '@/app/constants';
 // ninja focus touch <
-import { Card, PageHeader } from "@/app/components";
+import { Card, CardHeader } from "@/app/components";
 // ninja focus touch >
 
 if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
@@ -106,7 +106,7 @@ function Signin() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-md w-full">
         <Card className="space-y-8">
-          <PageHeader
+          <CardHeader
             title="Welcome"
             description="Sign in with your Google account to continue"
             className="text-center" />

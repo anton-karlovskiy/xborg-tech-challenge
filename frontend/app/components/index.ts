@@ -6,5 +6,5 @@ export { default as ErrorState, type ErrorStateProps } from "./ErrorState";
 export { default as Avatar, type AvatarProps } from "./Avatar";
 export { default as Alert, type AlertProps } from "./Alert";
 export { default as Card, type CardProps } from "./Card";
-export { default as PageHeader, type PageHeaderProps } from "./PageHeader";
+export { default as CardHeader, type CardHeaderProps } from "./CardHeader";
 // ninja focus touch >

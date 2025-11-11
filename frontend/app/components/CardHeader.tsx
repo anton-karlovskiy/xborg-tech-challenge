@@ -1,16 +1,16 @@
-interface PageHeaderProps {
+interface CardHeaderProps {
   title: string;
   description?: string;
   action?: React.ReactNode;
   className?: string;
 }
 
-function PageHeader({
+function CardHeader({
   title,
   description,
   action,
   className = ""
-}: PageHeaderProps) {
+}: CardHeaderProps) {
   const flexJustify = action ? "justify-between" : "justify-center";
   
   return (
@@ -26,6 +26,6 @@ function PageHeader({
   );
 }
 
-export type { PageHeaderProps };
+export type { CardHeaderProps };
 
-export default PageHeader;
+export default CardHeader;
