@@ -1,5 +1,5 @@
 // ninja focus touch <
-export { Button } from "./Button";
+export { default as Button, type ButtonProps } from "./Button";
 export { Input } from "./Input";
 export { Card } from "./Card";
 export { Avatar } from "./Avatar";

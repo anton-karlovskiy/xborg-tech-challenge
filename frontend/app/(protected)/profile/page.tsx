@@ -20,6 +20,7 @@ import {
 // ninja focus touch <
 import {
   Button,
+  type ButtonProps,
   Input,
   Card,
   Avatar,
@@ -32,23 +33,25 @@ function SubmitButton() {
   const { pending } = useFormStatus();
   
   return (
-    <Button type="submit" disabled={pending} fullWidth>
+    <Button
+      type="submit"
+      disabled={pending}
+      fullWidth>
       {pending ? "Saving..." : "Save Changes"}
     </Button>
   );
 }
 
-function CancelButton({ onCancel }: { onCancel: () => void }) {
+function CancelButton(props: ButtonProps) {
   const { pending } = useFormStatus();
   
   return (
     <Button
       type="button"
       variant="secondary"
-      onClick={onCancel}
       disabled={pending}
       fullWidth
-    >
+      {...props}>
       Cancel
     </Button>
   );
@@ -125,7 +128,9 @@ function Profile() {
           <PageHeader
             title="Profile"
             action={
-              <Button variant="danger" onClick={logout}>
+              <Button
+                variant="danger"
+                onClick={logout}>
                 Sign Out
               </Button>
             }
@@ -174,11 +179,13 @@ function Profile() {
               <div className="flex gap-4 pt-4">
                 {isEditing ? (
                   <>
-                    <CancelButton onCancel={() => setIsEditing(false)} />
+                    <CancelButton onClick={() => setIsEditing(false)} />
                     <SubmitButton />
                   </>
                 ) : (
-                  <Button onClick={() => setIsEditing(true)} fullWidth>
+                  <Button
+                    onClick={() => setIsEditing(true)}
+                    fullWidth>
                     Edit Profile
                   </Button>
                 )}
