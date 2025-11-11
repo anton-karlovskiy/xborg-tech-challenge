@@ -1,16 +1,16 @@
-// ninja focus touch <
-import { ReactNode } from "react";
+type CardProps = React.ComponentPropsWithRef<"div">;
 
-interface CardProps {
-  children: ReactNode;
-  className?: string;
-}
-
-export function Card({ children, className = "" }: CardProps) {
+function Card({
+  className = "",
+  ...rest
+}: CardProps) {
   return (
-    <div className={`bg-white rounded-lg shadow-lg p-8 ${className}`}>
-      {children}
-    </div>
+    <div
+      className={`bg-white rounded-lg shadow-lg p-8 ${className}`}
+      {...rest} />
   );
 }
-// ninja focus touch >
+
+export type { CardProps };
+
+export default Card;
