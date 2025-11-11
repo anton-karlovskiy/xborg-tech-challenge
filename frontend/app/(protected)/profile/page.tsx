@@ -6,7 +6,6 @@ import {
   useId
 } from "react";
 import { useFormStatus } from "react-dom";
-import Image from "next/image";
 import {
   useMutation,
   useQueryClient
@@ -18,18 +17,24 @@ import {
   userApi,
   UpdateUserProfile
 } from "@/lib/api";
+// ninja focus touch <
+import {
+  Button,
+  Input,
+  Card,
+  Avatar,
+  Alert,
+  PageHeader
+} from "@/app/components";
+// ninja focus touch >
 
 function SubmitButton() {
   const { pending } = useFormStatus();
   
   return (
-    <button
-      type="submit"
-      disabled={pending}
-      className="flex-1 px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-    >
+    <Button type="submit" disabled={pending} fullWidth>
       {pending ? "Saving..." : "Save Changes"}
-    </button>
+    </Button>
   );
 }
 
@@ -37,14 +42,15 @@ function CancelButton({ onCancel }: { onCancel: () => void }) {
   const { pending } = useFormStatus();
   
   return (
-    <button
+    <Button
       type="button"
+      variant="secondary"
       onClick={onCancel}
       disabled={pending}
-      className="flex-1 px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+      fullWidth
     >
       Cancel
-    </button>
+    </Button>
   );
 }
 
@@ -115,82 +121,53 @@ function Profile() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800">Profile</h1>
-            <button
-              onClick={logout}
-              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
-            >
-              Sign Out
-            </button>
-          </div>
+        <Card>
+          <PageHeader
+            title="Profile"
+            action={
+              <Button variant="danger" onClick={logout}>
+                Sign Out
+              </Button>
+            }
+          />
 
           <div className="space-y-6">
             {/* Profile Picture */}
-            {user.picture && (
-              <div className="flex justify-center">
-                <Image
-                  src={user.picture}
-                  alt="Profile"
-                  width={128}
-                  height={128}
-                  priority
-                  className="rounded-full border-4 border-indigo-500"
-                />
-              </div>
-            )}
+            {user.picture && <Avatar src={user.picture} alt="Profile" />}
 
             {/* Email (read-only) */}
-            <div>
-              <label htmlFor={emailId} className="block text-sm font-medium text-gray-700 mb-1">
-                Email
-              </label>
-              <input
-                id={emailId}
-                type="email"
-                value={user.email}
-                disabled
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 bg-gray-50"
-              />
-            </div>
+            <Input
+              id={emailId}
+              type="email"
+              label="Email"
+              value={user.email}
+              disabled
+            />
 
             <form action={isEditing ? formAction : undefined} className="space-y-6">
               {/* First Name */}
-              <div>
-                <label htmlFor={firstNameId} className="block text-sm font-medium text-gray-700 mb-1">
-                  First Name
-                </label>
-                <input
-                  id={firstNameId}
-                  type="text"
-                  name={FIRST_NAME_FIELD}
-                  defaultValue={user.firstName || ""}
-                  disabled={!isEditing}
-                  className={`w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 ${isEditing ? "bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" : "bg-gray-50"}`}
-                />
-              </div>
+              <Input
+                id={firstNameId}
+                type="text"
+                name={FIRST_NAME_FIELD}
+                label="First Name"
+                defaultValue={user.firstName || ""}
+                disabled={!isEditing}
+              />
 
               {/* Last Name */}
-              <div>
-                <label htmlFor={lastNameId} className="block text-sm font-medium text-gray-700 mb-1">
-                  Last Name
-                </label>
-                <input
-                  id={lastNameId}
-                  type="text"
-                  name={LAST_NAME_FIELD}
-                  defaultValue={user.lastName || ""}
-                  disabled={!isEditing}
-                  className={`w-full px-4 py-2 border border-gray-300 rounded-lg text-gray-600 ${isEditing ? "bg-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" : "bg-gray-50"}`}
-                />
-              </div>
+              <Input
+                id={lastNameId}
+                type="text"
+                name={LAST_NAME_FIELD}
+                label="Last Name"
+                defaultValue={user.lastName || ""}
+                disabled={!isEditing}
+              />
 
               {/* Error Message */}
               {isEditing && state.error && (
-                <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
-                  {state.error}
-                </div>
+                <Alert variant="error">{state.error}</Alert>
               )}
 
               {/* Action Buttons */}
@@ -201,12 +178,9 @@ function Profile() {
                     <SubmitButton />
                   </>
                 ) : (
-                  <button
-                    onClick={() => setIsEditing(true)}
-                    className="flex-1 px-6 py-3 bg-indigo-500 text-white rounded-lg hover:bg-indigo-600 transition-colors font-medium"
-                  >
+                  <Button onClick={() => setIsEditing(true)} fullWidth>
                     Edit Profile
-                  </button>
+                  </Button>
                 )}
               </div>
             </form>
@@ -223,7 +197,7 @@ function Profile() {
               )}
             </div>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   );

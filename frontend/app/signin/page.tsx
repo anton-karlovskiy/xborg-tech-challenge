@@ -9,6 +9,9 @@ import { useRouter } from "next/navigation";
 import { useAuth } from '@/app/contexts/auth-context';
 import { authApi } from "@/lib/api";
 import { PAGE_URLS } from '@/app/constants';
+// ninja focus touch <
+import { Card, PageHeader } from "@/app/components";
+// ninja focus touch >
 
 if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
   throw new Error("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
@@ -101,16 +104,17 @@ function Signin() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8">
-        <h1 className="text-3xl font-bold text-center mb-2 text-gray-800">
-          Welcome
-        </h1>
-        <p className="text-center text-gray-600 mb-8">
-          Sign in with your Google account to continue
-        </p>
-        <div className="flex justify-center">
-          <div id={STR_GOOGLE_SIGNIN_BUTTON}></div>
-        </div>
+      <div className="max-w-md w-full">
+        <Card>
+          <PageHeader
+            title="Welcome"
+            description="Sign in with your Google account to continue"
+            className="text-center mb-8"
+          />
+          <div className="flex justify-center">
+            <div id={STR_GOOGLE_SIGNIN_BUTTON}></div>
+          </div>
+        </Card>
       </div>
     </div>
   );

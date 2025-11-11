@@ -23,6 +23,9 @@ import {
   LOCAL_STORAGE_KEYS,
   QUERY_KEYS
 } from "@/app/constants";
+// ninja focus touch <
+import { LoadingState, ErrorState } from "@/app/components";
+// ninja focus touch >
 
 /**
  * AuthProvider adopts the "render authenticated vs unauthenticated trees"
@@ -105,19 +108,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [error, hasToken, queryClient]);
 
   if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Loading...</div>
-      </div>
-    );
+    return <LoadingState />;
   }
   
   if (error) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-xl">Error: {error.message}</div>
-      </div>
-    );
+    return <ErrorState message={error.message} />;
   }
 
   const login = (token: string, userData: UserProfile) => {
