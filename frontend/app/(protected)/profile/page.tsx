@@ -146,8 +146,8 @@ function Profile() {
               type="email"
               label="Email"
               value={user.email}
-              disabled
-            />
+              readOnly
+              disabled />
 
             <form action={isEditing ? formAction : undefined} className="space-y-6">
               {/* First Name */}
@@ -156,9 +156,8 @@ function Profile() {
                 type="text"
                 name={FIRST_NAME_FIELD}
                 label="First Name"
-                defaultValue={user.firstName || ""}
-                disabled={!isEditing}
-              />
+                defaultValue={user.firstName ?? ""}
+                disabled={!isEditing} />
 
               {/* Last Name */}
               <Input
@@ -166,9 +165,8 @@ function Profile() {
                 type="text"
                 name={LAST_NAME_FIELD}
                 label="Last Name"
-                defaultValue={user.lastName || ""}
-                disabled={!isEditing}
-              />
+                defaultValue={user.lastName ?? ""}
+                disabled={!isEditing} />
 
               {/* Error Message */}
               {isEditing && state.error && (
