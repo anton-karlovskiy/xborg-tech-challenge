@@ -2,7 +2,8 @@
 
 import {
   useState,
-  useActionState
+  useActionState,
+  useId
 } from "react";
 import { useFormStatus } from "react-dom";
 import Image from "next/image";
@@ -54,6 +55,7 @@ interface FormState {
 
 const FIRST_NAME_FIELD = "firstName";
 const LAST_NAME_FIELD = "lastName";
+const EMAIL_FIELD = "email";
 
 function Profile() {
   const { user, logout } = useAuth();
@@ -63,7 +65,13 @@ function Profile() {
   }
 
   const queryClient = useQueryClient();
+
   const [isEditing, setIsEditing] = useState(false);
+
+  const id = useId();
+  const emailId = `${id}-${EMAIL_FIELD}`;
+  const firstNameId = `${id}-${FIRST_NAME_FIELD}`;
+  const lastNameId = `${id}-${LAST_NAME_FIELD}`;
 
   const updateProfileMutation = useMutation({
     mutationFn: async (updateData: UpdateUserProfile) => {
@@ -104,10 +112,6 @@ function Profile() {
     success: false
   });
 
-  const handleCancel = () => {
-    setIsEditing(false);
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
@@ -139,10 +143,11 @@ function Profile() {
 
             {/* Email (read-only) */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor={emailId} className="block text-sm font-medium text-gray-700 mb-1">
                 Email
               </label>
               <input
+                id={emailId}
                 type="email"
                 value={user.email}
                 disabled
@@ -153,10 +158,11 @@ function Profile() {
             <form action={isEditing ? formAction : undefined} className="space-y-6">
               {/* First Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor={firstNameId} className="block text-sm font-medium text-gray-700 mb-1">
                   First Name
                 </label>
                 <input
+                  id={firstNameId}
                   type="text"
                   name={FIRST_NAME_FIELD}
                   defaultValue={user.firstName || ""}
@@ -167,10 +173,11 @@ function Profile() {
 
               {/* Last Name */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor={lastNameId} className="block text-sm font-medium text-gray-700 mb-1">
                   Last Name
                 </label>
                 <input
+                  id={lastNameId}
                   type="text"
                   name={LAST_NAME_FIELD}
                   defaultValue={user.lastName || ""}
@@ -190,7 +197,7 @@ function Profile() {
               <div className="flex gap-4 pt-4">
                 {isEditing ? (
                   <>
-                    <CancelButton onCancel={handleCancel} />
+                    <CancelButton onCancel={() => setIsEditing(false)} />
                     <SubmitButton />
                   </>
                 ) : (
