@@ -7,12 +7,12 @@ import {
 import { useRouter } from "next/navigation";
 
 import { useAuth } from '@/app/contexts/auth-context';
-import { authApi } from "@/lib/api";
-import { PAGE_URLS } from '@/app/constants';
 import {
   Card,
   CardHeader
 } from "@/app/components";
+import { authApi } from "@/lib/api";
+import { PAGE_URLS } from '@/app/constants';
 
 if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
   throw new Error("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
