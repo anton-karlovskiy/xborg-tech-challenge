@@ -2,10 +2,6 @@
 
 import {
   useState,
-  // ninja focus touch <
-  useEffect,
-  useRef,
-  // ninja focus touch >
   useActionState,
   useId
 } from "react";
@@ -14,6 +10,7 @@ import {
   useMutation,
   useQueryClient
 } from "@tanstack/react-query";
+import { useTimeoutFn } from "react-use";
 
 import { useAuth } from "@/app/contexts/auth-context";
 import { QUERY_KEYS } from "@/app/constants";
@@ -80,26 +77,11 @@ function Profile() {
   const queryClient = useQueryClient();
 
   const [isEditing, setIsEditing] = useState(false);
-  // ninja focus touch <
-  const [showSuccess, setShowSuccess] = useState(false);
-  const successAlertTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const clearSuccessAlertTimeout = () => {
-    if (successAlertTimeoutRef.current) {
-      clearTimeout(successAlertTimeoutRef.current);
-      successAlertTimeoutRef.current = null;
-    }
-  };
 
-  const showSuccessAlert = () => {
-    clearSuccessAlertTimeout();
-    setShowSuccess(true);
-
-    successAlertTimeoutRef.current = setTimeout(() => {
-      setShowSuccess(false);
-      successAlertTimeoutRef.current = null;
-    }, 2000);
-  };
-  // ninja focus touch >
+  const [successAlertDisplayable, setSuccessAlertDisplayable] = useState(false);
+  const [, cancelSuccessAlertTimer, resetSuccessAlertTimer] = useTimeoutFn(() => {
+    setSuccessAlertDisplayable(false);
+  }, 2000);
 
   const id = useId();
   const emailId = `${id}-${EMAIL_FIELD}`;
@@ -127,19 +109,18 @@ function Profile() {
         firstName: String(formData.get(FIRST_NAME_FIELD)) || undefined,
         lastName: String(formData.get(LAST_NAME_FIELD)) || undefined
       };
-
       await updateProfileMutation.mutateAsync(updateData);
-      // ninja focus touch <
-      showSuccessAlert();
-      // ninja focus touch >
+
+      setSuccessAlertDisplayable(true);
+      resetSuccessAlertTimer();
       
       return { error: null, success: true };
     } catch (error) {
       console.error("Failed to update profile:", error);
-      // ninja focus touch <
-      clearSuccessAlertTimeout();
-      setShowSuccess(false);
-      // ninja focus touch >
+
+      setSuccessAlertDisplayable(false);
+      cancelSuccessAlertTimer();
+      
       return {
         error: error instanceof Error ? error.message : "Failed to update profile. Please try again.",
         success: false
@@ -151,14 +132,6 @@ function Profile() {
     error: null,
     success: false
   });
-
-  // ninja focus touch <
-  useEffect(() => {
-    return () => {
-      clearSuccessAlertTimeout();
-    };
-  }, []);
-  // ninja focus touch >
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
@@ -218,12 +191,10 @@ function Profile() {
                 <Alert variant="error">{state.error}</Alert>
               )}
 
-              {/* ninja focus touch < */}
               {/* Success Message */}
-              {isEditing && state.success && showSuccess && (
+              {isEditing && state.success && successAlertDisplayable && (
                 <Alert variant="success">Profile updated successfully</Alert>
               )}
-              {/* ninja focus touch > */}
 
               {/* Action Buttons */}
               <div className="flex gap-4 pt-4">
