@@ -25,20 +25,21 @@ export function Input({
       : "bg-white border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500";
 
   return (
-    <div>
+    <div className="space-y-1">
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium text-gray-700 mb-1">
+          className="block text-sm font-medium text-gray-700">
           {label}
         </label>
       )}
       <input
         id={inputId}
         className={`${baseStyles} ${stateStyles} ${className}`}
+        disabled={disabled}
         {...rest} />
       {error && (
-        <p className="mt-1 text-sm text-red-600">{error}</p>
+        <p className="text-sm text-red-600">{error}</p>
       )}
     </div>
   );

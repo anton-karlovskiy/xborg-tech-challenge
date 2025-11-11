@@ -138,7 +138,13 @@ function Profile() {
 
           <div className="space-y-6">
             {/* Profile Picture */}
-            {user.picture && <Avatar src={user.picture} alt="Profile" />}
+            {user.picture && (
+              <Avatar
+                src={user.picture}
+                alt="Profile"
+                size={128}
+                className="mx-auto" />
+            )}
 
             {/* Email (read-only) */}
             <Input
