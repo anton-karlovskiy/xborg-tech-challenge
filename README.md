@@ -7,6 +7,7 @@ A full-stack application with Google OAuth authentication and user profile manag
 ## Tech Stack
 
 ### Backend
+
 - **NestJS** - Progressive Node.js framework
 - **TypeORM** - ORM for database interactions
 - **SQLite** - Database engine
@@ -14,6 +15,7 @@ A full-stack application with Google OAuth authentication and user profile manag
 - **Passport** - Authentication middleware
 
 ### Frontend
+
 - **Next.js 14** - React framework with App Router
 - **TypeScript** - Type safety
 - **TailwindCSS** - Utility-first CSS framework
@@ -139,6 +141,7 @@ The frontend will run on `http://localhost:3000`
 ## Environment Variables
 
 ### Backend (.env)
+
 - `DB_DATABASE` - SQLite database file path
 - `JWT_SECRET` - Secret key for JWT tokens
 - `JWT_EXPIRES_IN` - JWT token expiration time
@@ -149,6 +152,7 @@ The frontend will run on `http://localhost:3000`
 - `FRONTEND_URL` - Frontend URL for CORS
 
 ### Frontend (.env.local)
+
 - `NEXT_PUBLIC_API_URL` - Backend API URL
 - `NEXT_PUBLIC_GOOGLE_CLIENT_ID` - Google OAuth Client ID
 
@@ -162,12 +166,13 @@ The frontend will run on `http://localhost:3000`
 ## Development Commands
 
 ### Backend
+
 - `npm run start:dev` - Start development server with hot reload
 - `npm run build` - Build for production
 - `npm run start:prod` - Start production server
 
 ### Frontend
+
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run start` - Start production server
-
