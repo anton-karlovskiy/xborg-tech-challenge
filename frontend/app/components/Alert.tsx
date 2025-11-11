@@ -1,13 +1,12 @@
-// ninja focus touch <
-import { ReactNode } from "react";
-
-interface AlertProps {
-  children: ReactNode;
+interface AlertProps extends React.ComponentPropsWithRef<"div"> {
   variant?: "error" | "success" | "info" | "warning";
-  className?: string;
 }
 
-export function Alert({ children, variant = "error", className = "" }: AlertProps) {
+function Alert({
+  variant = "error",
+  className = "",
+  ...rest
+}: AlertProps) {
   const variantStyles = {
     error: "bg-red-50 border-red-200 text-red-700",
     success: "bg-green-50 border-green-200 text-green-700",
@@ -16,9 +15,12 @@ export function Alert({ children, variant = "error", className = "" }: AlertProp
   };
 
   return (
-    <div className={`p-3 border rounded-lg text-sm ${variantStyles[variant]} ${className}`}>
-      {children}
-    </div>
+    <div
+      className={`p-3 border rounded-lg text-sm ${variantStyles[variant]} ${className}`}
+      {...rest} />
   );
 }
-// ninja focus touch >
+
+export { type AlertProps };
+
+export default Alert;

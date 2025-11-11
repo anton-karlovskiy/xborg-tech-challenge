@@ -3,7 +3,7 @@ interface ErrorStateProps {
   className?: string;
 }
 
-export function ErrorState({
+function ErrorState({
   message,
   className = ""
 }: ErrorStateProps) {

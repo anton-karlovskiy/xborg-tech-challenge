@@ -4,7 +4,7 @@ export { default as Input, type InputProps } from "./Input";
 export { default as LoadingState, type LoadingStateProps } from "./LoadingState";
 export { default as ErrorState, type ErrorStateProps } from "./ErrorState";
 export { default as Avatar, type AvatarProps } from "./Avatar";
+export { default as Alert, type AlertProps } from "./Alert";
 export { Card } from "./Card";
-export { Alert } from "./Alert";
 export { PageHeader } from "./PageHeader";
 // ninja focus touch >

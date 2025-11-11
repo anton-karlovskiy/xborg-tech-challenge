@@ -179,6 +179,11 @@ function Profile() {
                 <Alert variant="error">{state.error}</Alert>
               )}
 
+              {/* Success Message */}
+              {isEditing && state.success && (
+                <Alert variant="success">Profile updated successfully</Alert>
+              )}
+
               {/* Action Buttons */}
               <div className="flex gap-4 pt-4">
                 {isEditing ? (
