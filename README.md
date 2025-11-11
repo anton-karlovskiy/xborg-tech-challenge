@@ -18,6 +18,7 @@ A full-stack application with Google OAuth authentication and user profile manag
 - **TypeScript** - Type safety
 - **TailwindCSS** - Utility-first CSS framework
 - **React Query** - Data fetching and state management
+- **react-use** - Utility hooks collection
 
 ## Prerequisites
 
@@ -102,13 +103,19 @@ The frontend will run on `http://localhost:3000`
 6. Click "Save Changes" to update your profile
 7. Your session will persist between visits (stored in localStorage)
 
-## Best practices
+## Best Practices
 
 ### Authentication
 
   - The frontend follows the "Authenticated vs Unauthenticated App" pattern described by Kent C. Dodds, where the root auth context decides whether to render the protected tree or the public screens. [Authentication in React Applications](https://kentcdodds.com/blog/authentication-in-react-applications)
   - `frontend/app/contexts/auth-context.tsx` checks for a persisted JWT in `localStorage`, defers rendering until the token state is known, and hydrates the user profile through React Query.
   - Invalid tokens are removed eagerly and the React Query cache is cleared, keeping the rest of the UI consistent with the user's session state.
+
+### React + TypeScript
+
+  - We follow the community-maintained React TypeScript Cheatsheet for patterns, type helpers, and example usage across the codebase.[^1]
+
+[^1]: https://github.com/typescript-cheatsheets/react
 
 ## API Endpoints
 
