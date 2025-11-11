@@ -105,12 +105,11 @@ function Signin() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
       <div className="max-w-md w-full">
-        <Card>
+        <Card className="space-y-8">
           <PageHeader
             title="Welcome"
             description="Sign in with your Google account to continue"
-            className="text-center mb-8"
-          />
+            className="text-center" />
           <div className="flex justify-center">
             <div id={STR_GOOGLE_SIGNIN_BUTTON}></div>
           </div>
