@@ -13,11 +13,6 @@ import {
 import { useTimeoutFn } from "react-use";
 
 import { useAuth } from "@/app/contexts/auth-context";
-import { QUERY_KEYS } from "@/app/constants";
-import {
-  userApi,
-  UpdateUserProfile
-} from "@/lib/api";
 import {
   Button,
   type ButtonProps,
@@ -27,6 +22,11 @@ import {
   Alert,
   CardHeader
 } from "@/app/components";
+import {
+  userApi,
+  UpdateUserProfile
+} from "@/lib/api";
+import { QUERY_KEYS } from "@/app/constants";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -34,6 +34,7 @@ function SubmitButton() {
   return (
     <Button
       type="submit"
+      variant="primary"
       disabled={pending}
       fullWidth>
       {pending ? "Saving..." : "Save Changes"}
@@ -76,7 +77,9 @@ function Profile() {
 
   const [isEditing, setIsEditing] = useState(false);
 
+  // Tracks whether success message should be visible post-submit
   const [successAlertDisplayable, setSuccessAlertDisplayable] = useState(false);
+  // Automatically hide success message after a short delay; timer restarts on each successful submit
   const [, cancelSuccessAlertTimer, resetSuccessAlertTimer] = useTimeoutFn(() => {
     setSuccessAlertDisplayable(false);
   }, 2000);
@@ -91,7 +94,7 @@ function Profile() {
       // Testing delay
       await new Promise(resolve => setTimeout(resolve, 1000));
 
-      return userApi.editProfile(updateData)
+      return userApi.editProfile(updateData);
     },
     onSuccess: (updatedProfile) => {
       queryClient.setQueryData(QUERY_KEYS.USER_PROFILE, updatedProfile);
@@ -132,7 +135,7 @@ function Profile() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         <Card className="space-y-8">
           <CardHeader
@@ -144,7 +147,6 @@ function Profile() {
                 Sign Out
               </Button>
             } />
-
           <div className="space-y-6">
             {/* Profile Picture */}
             {user.picture && (
@@ -154,7 +156,6 @@ function Profile() {
                 size={128}
                 className="mx-auto" />
             )}
-
             {/* Email (read-only) */}
             <Input
               id={emailId}
@@ -163,8 +164,7 @@ function Profile() {
               value={user.email}
               readOnly
               disabled />
-
-            <form action={isEditing ? formAction : undefined} className="space-y-6">
+            <form action={formAction} className="space-y-6">
               {/* First Name */}
               <Input
                 id={firstNameId}
@@ -173,7 +173,6 @@ function Profile() {
                 label="First Name"
                 defaultValue={user.firstName ?? ""}
                 disabled={!isEditing} />
-
               {/* Last Name */}
               <Input
                 id={lastNameId}
@@ -182,17 +181,14 @@ function Profile() {
                 label="Last Name"
                 defaultValue={user.lastName ?? ""}
                 disabled={!isEditing} />
-
               {/* Error Message */}
               {isEditing && state.error && (
                 <Alert variant="error">{state.error}</Alert>
               )}
-
               {/* Success Message */}
               {isEditing && state.success && successAlertDisplayable && (
                 <Alert variant="success">Profile updated successfully</Alert>
               )}
-
               {/* Action Buttons */}
               <div className="flex gap-4 pt-4">
                 {isEditing ? (
@@ -202,6 +198,7 @@ function Profile() {
                   </>
                 ) : (
                   <Button
+                    type="button"
                     onClick={() => setIsEditing(true)}
                     fullWidth>
                     Edit Profile
@@ -209,14 +206,13 @@ function Profile() {
                 )}
               </div>
             </form>
-
             {/* Account Info */}
-            <div className="pt-6 border-t border-gray-200">
+            <div className="pt-6 border-t border-gray-200 space-y-1">
               <p className="text-sm text-gray-500">
                 Account created: {new Date(user.createdAt).toLocaleDateString()}
               </p>
               {user.updatedAt !== user.createdAt && (
-                <p className="text-sm text-gray-500 mt-1">
+                <p className="text-sm text-gray-500">
                   Last updated: {new Date(user.updatedAt).toLocaleDateString()}
                 </p>
               )}

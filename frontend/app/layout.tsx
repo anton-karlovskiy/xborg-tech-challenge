@@ -21,7 +21,11 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <QueryProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100">
+              {children}
+            </div>
+          </AuthProvider>
         </QueryProvider>
       </body>
     </html>
