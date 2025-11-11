@@ -18,9 +18,33 @@ if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
   throw new Error("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
 }
 
+interface CredentialResponse {
+  credential: string;
+  select_by?: string;
+}
+
+interface GoogleAccounts {
+  accounts: {
+    id: {
+      initialize: (config: {
+        client_id: string;
+        callback: (response: CredentialResponse) => void;
+      }) => void;
+      renderButton: (
+        element: HTMLElement | null,
+        options: {
+          theme?: string;
+          size?: string;
+          width?: number;
+        }
+      ) => void;
+    };
+  };
+}
+
 declare global {
   interface Window {
-    google: any;
+    google?: GoogleAccounts;
   }
 }
 
@@ -31,7 +55,7 @@ function Signin() {
 
   const { user, login } = useAuth();
 
-  const googleSigninCallback = useCallback(async (response: any) => {
+  const googleSigninCallback = useCallback(async (response: CredentialResponse) => {
     try {
       // Decode the Google JWT token payload to extract user info
       // JWT format: header.payload.signature - we need the middle part (payload)
@@ -83,7 +107,7 @@ function Signin() {
     script.onload = () => {
       if (window.google) {
         window.google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
           callback: googleSigninCallback
         });
 
