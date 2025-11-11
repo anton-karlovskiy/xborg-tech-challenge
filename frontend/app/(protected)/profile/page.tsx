@@ -18,7 +18,6 @@ import {
   userApi,
   UpdateUserProfile
 } from "@/lib/api";
-// ninja focus touch <
 import {
   Button,
   type ButtonProps,
@@ -28,7 +27,6 @@ import {
   Alert,
   CardHeader
 } from "@/app/components";
-// ninja focus touch >
 
 function SubmitButton() {
   const { pending } = useFormStatus();

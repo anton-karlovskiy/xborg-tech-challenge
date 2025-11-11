@@ -23,9 +23,10 @@ import {
   LOCAL_STORAGE_KEYS,
   QUERY_KEYS
 } from "@/app/constants";
-// ninja focus touch <
-import { LoadingState, ErrorState } from "@/app/components";
-// ninja focus touch >
+import {
+  LoadingState,
+  ErrorState
+} from "@/app/components";
 
 /**
  * AuthProvider adopts the "render authenticated vs unauthenticated trees"

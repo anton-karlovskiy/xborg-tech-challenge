@@ -9,9 +9,10 @@ import { useRouter } from "next/navigation";
 import { useAuth } from '@/app/contexts/auth-context';
 import { authApi } from "@/lib/api";
 import { PAGE_URLS } from '@/app/constants';
-// ninja focus touch <
-import { Card, CardHeader } from "@/app/components";
-// ninja focus touch >
+import {
+  Card,
+  CardHeader
+} from "@/app/components";
 
 if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
   throw new Error("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
