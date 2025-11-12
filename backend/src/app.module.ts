@@ -1,24 +1,36 @@
-import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule } from '@nestjs/config';
-import { AuthModule } from './auth/auth.module';
-import { UserModule } from './user/user.module';
-import { User } from './user/entities/user.entity';
+import { Module } from "@nestjs/common";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+import { TypeOrmModule } from "@nestjs/typeorm";
+
+import { AuthModule } from "./auth/auth.module";
+import { UserModule } from "./user/user.module";
+import { User } from "./user/entities/user.entity";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
+      isGlobal: true
     }),
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: process.env.DB_DATABASE || './database.sqlite',
-      entities: [User],
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: (configService: ConfigService) => {
+        const database = configService.get<string>("DB_DATABASE");
+        if (!database) {
+          throw new Error("DB_DATABASE is not set in environment variables");
+        }
+        
+        return {
+          type: "sqlite",
+          database,
+          entities: [User],
+          synchronize: true
+        };
+      },
+      inject: [ConfigService]
     }),
     AuthModule,
-    UserModule,
-  ],
+    UserModule
+  ]
 })
-export class AppModule {}
 
+export class AppModule {}
