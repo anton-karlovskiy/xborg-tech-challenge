@@ -57,27 +57,9 @@ function Signin() {
 
   const googleSigninCallback = useCallback(async (response: CredentialResponse) => {
     try {
-      // Decode the Google JWT token payload to extract user info
-      // JWT format: header.payload.signature - we need the middle part (payload)
-      // The payload is base64url-encoded JSON containing user data from Google
-      const base64Url = response.credential.split(".")[1]; // Extract payload (middle part)
-      const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/"); // Convert base64url to base64
-      const jsonPayload = decodeURIComponent(
-        atob(base64) // Decode base64 to string
-          .split("")
-          .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2)) // Convert to URL-encoded hex
-          .join("")
-      );
-      const userData = JSON.parse(jsonPayload); // Parse JSON to get user object
-
-      // Send to backend
-      const result = await authApi.googleLogin({
-        googleId: userData.sub,
-        email: userData.email,
-        firstName: userData.given_name,
-        lastName: userData.family_name,
-        picture: userData.picture
-      });
+      // Send the Google ID token directly to the backend for verification
+      // The backend will verify the token with Google and extract user information
+      const result = await authApi.googleLogin(response.credential);
 
       // Store token and user data
       // Note: result.access_token is our backend's JWT (different from Google's JWT)

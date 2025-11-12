@@ -1,60 +1,66 @@
-import { Injectable } from "@nestjs/common";
-import { JwtService } from "@nestjs/jwt";
+import {
+  Injectable,
+  UnauthorizedException
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { OAuth2Client } from 'google-auth-library';
+import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
 
-import { UserService } from "../user/user.service";
-import { User } from "../user/entities/user.entity";
-import { GoogleProfile } from "./types/auth.types";
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class AuthService {
+  private googleClient: OAuth2Client;
+
   constructor(
-    private userService: UserService,
+    @InjectRepository(User) private userRepository: Repository<User>,
     private jwtService: JwtService
-  ) {}
+  ) {
+    this.googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+  }
 
-  async validateGoogleUser(profile: GoogleProfile): Promise<User> {
-    const { id, emails, name, photos } = profile;
-    
-    if (!emails || emails.length === 0 || !emails[0]?.value) {
-      throw new Error("Google profile must contain at least one email address");
-    }
-    
-    let user = await this.userService.findByGoogleId(id);
-    
-    if (!user) {
-      user = await this.userService.create({
-        googleId: id,
-        email: emails[0].value,
-        firstName: name?.givenName || null,
-        lastName: name?.familyName || null,
-        picture: photos?.[0]?.value || null
+  async validateGoogleIdToken(idToken: string) {
+    try {
+      const ticket = await this.googleClient.verifyIdToken({
+        idToken,
+        audience: process.env.GOOGLE_CLIENT_ID
       });
-    } else {
-      // Update user info if it changed
-      user.firstName = name?.givenName || user.firstName;
-      user.lastName = name?.familyName || user.lastName;
-      user.picture = photos?.[0]?.value || user.picture;
-      await this.userService["userRepository"].save(user);
+
+      const payload = ticket.getPayload();
+      if (!payload?.sub || !payload.email) throw new UnauthorizedException("Invalid token");
+
+      return {
+        googleId: payload.sub,
+        email: payload.email,
+        firstName: payload.given_name,
+        lastName: payload.family_name,
+        picture: payload.picture
+      };
+    } catch {
+      throw new UnauthorizedException('Invalid Google token');
     }
-    
-    return user;
   }
 
-  async login(user: User) {
-    const payload = { sub: user.id, email: user.email };
-    return {
-      access_token: this.jwtService.sign(payload),
-      user: {
-        id: user.id,
-        email: user.email,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        picture: user.picture
-      }
-    };
-  }
+  async loginWithGoogle(idToken: string) {
+    const profile = await this.validateGoogleIdToken(idToken);
 
-  async validateUser(userId: string): Promise<User> {
-    return this.userService.findById(userId);
+    let user = await this.userRepository.findOne({ where: { googleId: profile.googleId } });
+    if (!user) {
+      user = this.userRepository.create(profile);
+      await this.userRepository.save(user);
+    } else {
+      // keep picture/name fresh (optional)
+      Object.assign(user, {
+        firstName: profile.firstName ?? user.firstName,
+        lastName: profile.lastName ?? user.lastName,
+        picture: profile.picture ?? user.picture
+      });
+      await this.userRepository.save(user);
+    }
+
+    const access_token = await this.jwtService.signAsync({ sub: user.id, email: user.email });
+
+    return { access_token, user };
   }
 }

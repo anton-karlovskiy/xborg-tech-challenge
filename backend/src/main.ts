@@ -16,6 +16,8 @@ async function bootstrap() {
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS']
   });
   
+  app.setGlobalPrefix("api");
+
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
     transform: true

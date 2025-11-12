@@ -50,14 +50,11 @@ interface UpdateUserProfile {
 };
 
 const authApi = {
-  googleLogin: async (data: {
-    googleId: string;
-    email: string;
-    firstName?: string;
-    lastName?: string;
-    picture?: string;
-  }): Promise<GoogleLoginResponse> => {
-    const response = await api.post<GoogleLoginResponse>(API_END_POINTS.AUTH_LOGIN_GOOGLE, data);
+  googleLogin: async (idToken: string): Promise<GoogleLoginResponse> => {
+    const response = await api.post<GoogleLoginResponse>(
+      API_END_POINTS.AUTH_LOGIN_GOOGLE,
+      { idToken }
+    );
 
     return response.data;
   }
