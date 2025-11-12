@@ -3,6 +3,7 @@ import { JwtService } from "@nestjs/jwt";
 
 import { UserService } from "../user/user.service";
 import { User } from "../user/entities/user.entity";
+import { GoogleProfile } from "./types/auth.types";
 
 @Injectable()
 export class AuthService {
@@ -11,8 +12,12 @@ export class AuthService {
     private jwtService: JwtService
   ) {}
 
-  async validateGoogleUser(profile: any): Promise<User> {
+  async validateGoogleUser(profile: GoogleProfile): Promise<User> {
     const { id, emails, name, photos } = profile;
+    
+    if (!emails || emails.length === 0 || !emails[0]?.value) {
+      throw new Error("Google profile must contain at least one email address");
+    }
     
     let user = await this.userService.findByGoogleId(id);
     
