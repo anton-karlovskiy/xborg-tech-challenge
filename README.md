@@ -147,7 +147,6 @@ The frontend will run on `http://localhost:3000`
 - `JWT_EXPIRES_IN` - JWT token expiration time
 - `GOOGLE_CLIENT_ID` - Google OAuth Client ID
 - `GOOGLE_CLIENT_SECRET` - Google OAuth Client Secret
-- `GOOGLE_CALLBACK_URL` - Google OAuth callback URL
 - `PORT` - Backend server port
 - `FRONTEND_URL` - Frontend URL for CORS
 

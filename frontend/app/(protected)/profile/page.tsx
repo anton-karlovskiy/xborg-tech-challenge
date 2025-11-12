@@ -172,7 +172,8 @@ function Profile() {
                 name={FIRST_NAME_FIELD}
                 label="First Name"
                 defaultValue={user.firstName ?? ""}
-                disabled={!isEditing} />
+                disabled={!isEditing}
+                required />
               {/* Last Name */}
               <Input
                 id={lastNameId}
@@ -180,7 +181,8 @@ function Profile() {
                 name={LAST_NAME_FIELD}
                 label="Last Name"
                 defaultValue={user.lastName ?? ""}
-                disabled={!isEditing} />
+                disabled={!isEditing}
+                required />
               {/* Error Message */}
               {isEditing && state.error && (
                 <Alert variant="error">{state.error}</Alert>
