@@ -1,23 +1,32 @@
-import { NestFactory } from '@nestjs/core';
-import { ValidationPipe } from '@nestjs/common';
-import { AppModule } from './app.module';
+import { NestFactory } from "@nestjs/core";
+import { ValidationPipe } from "@nestjs/common";
+
+import { AppModule } from "./app.module";
+
+if (!process.env.FRONTEND_URL) {
+  throw new Error("FRONTEND_URL is not set");
+}
+
+if (!process.env.PORT) {
+  throw new Error("PORT is not set");
+}
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-    credentials: true,
+    origin: process.env.FRONTEND_URL,
+    credentials: true
   });
   
   app.useGlobalPipes(new ValidationPipe({
     whitelist: true,
-    transform: true,
+    transform: true
   }));
   
-  const port = process.env.PORT || 3001;
+  const port = Number(process.env.PORT);
   await app.listen(port);
   console.log(`Application is running on: http://localhost:${port}`);
 }
-bootstrap();
 
+bootstrap();
