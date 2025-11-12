@@ -1,13 +1,14 @@
-import { Injectable } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt';
-import { UserService } from '../user/user.service';
-import { User } from '../user/entities/user.entity';
+import { Injectable } from "@nestjs/common";
+import { JwtService } from "@nestjs/jwt";
+
+import { UserService } from "../user/user.service";
+import { User } from "../user/entities/user.entity";
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
-    private jwtService: JwtService,
+    private jwtService: JwtService
   ) {}
 
   async validateGoogleUser(profile: any): Promise<User> {
@@ -21,14 +22,14 @@ export class AuthService {
         email: emails[0].value,
         firstName: name?.givenName || null,
         lastName: name?.familyName || null,
-        picture: photos?.[0]?.value || null,
+        picture: photos?.[0]?.value || null
       });
     } else {
       // Update user info if it changed
       user.firstName = name?.givenName || user.firstName;
       user.lastName = name?.familyName || user.lastName;
       user.picture = photos?.[0]?.value || user.picture;
-      await this.userService['userRepository'].save(user);
+      await this.userService["userRepository"].save(user);
     }
     
     return user;
@@ -43,8 +44,8 @@ export class AuthService {
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
-        picture: user.picture,
-      },
+        picture: user.picture
+      }
     };
   }
 
@@ -52,4 +53,3 @@ export class AuthService {
     return this.userService.findById(userId);
   }
 }
-
