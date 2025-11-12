@@ -124,7 +124,7 @@ The frontend will run on `http://localhost:3000`
 ### Public Endpoints
 
 - `POST /auth/login/google` - Authenticate with Google OAuth
-  - Body: `{ googleId, email, firstName?, lastName?, picture? }`
+  - Body: `{ idToken }`
   - Returns: `{ access_token, user }`
 
 ### Protected Endpoints (require JWT token)
