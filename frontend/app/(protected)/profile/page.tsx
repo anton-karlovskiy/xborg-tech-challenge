@@ -209,7 +209,7 @@ function Profile() {
             {/* Account Info */}
             <div className="pt-6 border-t border-gray-200 space-y-1">
               <p className="text-sm text-gray-500">
-                Account created: {new Date(user.createdAt).toLocaleDateString()}
+                Account created: {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
               </p>
               {user.updatedAt !== user.createdAt && (
                 <p className="text-sm text-gray-500">
