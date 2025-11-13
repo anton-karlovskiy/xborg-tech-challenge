@@ -124,7 +124,10 @@ The frontend will run on `http://localhost:3000`
 
 - `POST /auth/login/google` - Authenticate with Google OAuth
   - Body: `{ idToken }`
-  - Returns: `{ access_token, user }`
+  - Returns: `{ user }` (JWT token is set as HttpOnly cookie)
+
+- `POST /auth/logout` - Log out and clear authentication cookie
+  - Returns: `{ message: "Logged out successfully" }`
 
 ### Protected Endpoints (require JWT token)
 
