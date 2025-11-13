@@ -103,15 +103,14 @@ The frontend will run on `http://localhost:3000`
 4. After successful authentication, you'll be redirected to the Profile page
 5. Click "Edit Profile" to modify your first name and last name
 6. Click "Save Changes" to update your profile
-7. Your session will persist between visits (stored in localStorage)
+7. Your session will persist between visits (stored in HttpOnly cookies)
 
 ## Best Practices
 
 ### Authentication
 
   - The frontend follows the "Authenticated vs Unauthenticated App" pattern described by Kent C. Dodds, where the root auth context decides whether to render the protected tree or the public screens. [Authentication in React Applications](https://kentcdodds.com/blog/authentication-in-react-applications)
-  - `frontend/app/contexts/auth-context.tsx` checks for a persisted JWT in `localStorage`, defers rendering until the token state is known, and hydrates the user profile through React Query.
-  - Invalid tokens are removed eagerly and the React Query cache is cleared, keeping the rest of the UI consistent with the user's session state.
+  - **Security Best Practice**: localStorage is vulnerable to XSS attacks, and moving JWTs into HttpOnly cookies is the standard way to harden authentication in modern web apps. This application uses HttpOnly cookies for JWT storage, which prevents JavaScript access to tokens and significantly reduces the risk of XSS-based token theft.
 
 ### React + TypeScript
 
@@ -158,7 +157,7 @@ The frontend will run on `http://localhost:3000`
 ## Notes
 
 - The SQLite database file (`database.sqlite`) will be created automatically on first run
-- JWT tokens are stored in localStorage on the frontend
+- JWT tokens are stored in HttpOnly cookies (not localStorage) for enhanced security
 - Sessions persist between browser visits
 - The database uses TypeORM's `synchronize: true` for development (disable in production)
 
