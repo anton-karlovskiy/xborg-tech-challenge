@@ -1,9 +1,7 @@
 import "reflect-metadata";
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
-// ninja focus touch <
 import * as cookieParser from "cookie-parser";
-// ninja focus touch >
 import helmet from "helmet";
 
 import { AppModule } from "./app.module";
@@ -11,9 +9,7 @@ import { AppModule } from "./app.module";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  // ninja focus touch <
   app.use(cookieParser());
-  // ninja focus touch >
   app.use(helmet());
   
   app.enableCors({

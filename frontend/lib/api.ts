@@ -6,9 +6,7 @@ if (!process.env.NEXT_PUBLIC_API_URL) {
 
 const API_END_POINTS = {
   AUTH_LOGIN_GOOGLE: "/auth/login/google",
-  // ninja focus touch <
   AUTH_LOGOUT: "/auth/logout",
-  // ninja focus touch >
   USER_PROFILE: "/user/profile"
 };
 
@@ -17,9 +15,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json"
   },
-  // ninja focus touch <
-  withCredentials: true // Enable cookies (httpOnly cookies are sent automatically)
-  // ninja focus touch >
+  withCredentials: true // Enable cookies (httpOnly cookies are sent automatically by the browser)
 });
 
 interface GoogleLoginResponse {
@@ -42,7 +38,7 @@ interface UpdateUserProfile {
 };
 
 const authApi = {
-  googleLogin: async (idToken: string): Promise<GoogleLoginResponse> => {
+  login: async (idToken: string): Promise<GoogleLoginResponse> => {
     const response = await api.post<GoogleLoginResponse>(
       API_END_POINTS.AUTH_LOGIN_GOOGLE,
       { idToken }
@@ -50,12 +46,11 @@ const authApi = {
 
     return response.data;
   },
-  // ninja focus touch <
   logout: async (): Promise<{ message: string }> => {
     const response = await api.post<{ message: string }>(API_END_POINTS.AUTH_LOGOUT);
+    
     return response.data;
   }
-  // ninja focus touch >
 };
 
 const userApi = {

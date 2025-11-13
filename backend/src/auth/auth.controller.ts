@@ -2,15 +2,11 @@ import {
   Body,
   Controller,
   Post,
-  // ninja focus touch <
   Res,
   HttpCode,
   HttpStatus
-  // ninja focus touch >
 } from "@nestjs/common";
-// ninja focus touch <
 import { Response } from "express";
-// ninja focus touch >
 
 import { AuthService } from "./auth.service";
 import { GoogleLoginDto } from "./dto/google-login.dto";
@@ -20,13 +16,9 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post("login/google") // POST /auth/login/google
-  // ninja focus touch <
   async loginGoogle(@Body() googleLoginDto: GoogleLoginDto, @Res() res: Response) {
     const { access_token, user } = await this.authService.loginWithGoogle(googleLoginDto.idToken);
 
-    console.log("ninja focus touch: access_token =>", access_token);
-    console.log("ninja focus touch: user =>", user);
-    
     // Set httpOnly cookie with JWT token
     const isProduction = process.env.NODE_ENV === "production";
     res.cookie("access_token", access_token, {
@@ -40,9 +32,7 @@ export class AuthController {
     // Return user data (token is in cookie, not response body)
     return res.json({ user });
   }
-  // ninja focus touch >
 
-  // ninja focus touch <
   @Post("logout")
   @HttpCode(HttpStatus.OK)
   logout(@Res() res: Response) {
@@ -79,5 +69,4 @@ export class AuthController {
 
     return value * (multipliers[unit] || multipliers.d);
   }
-  // ninja focus touch >
 }

@@ -11,7 +11,6 @@ import {
   Card,
   CardHeader
 } from "@/app/components";
-import { authApi } from "@/lib/api";
 import { PAGE_URLS } from "@/app/constants";
 
 if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
@@ -57,16 +56,7 @@ function Signin() {
 
   const googleSigninCallback = useCallback(async (response: CredentialResponse) => {
     try {
-      // Send the Google ID token directly to the backend for verification
-      // ninja focus touch <
-      // The backend will verify the token with Google, extract user information,
-      // and set an httpOnly cookie with the JWT token
-      const result = await authApi.googleLogin(response.credential);
-
-      // Token is stored in httpOnly cookie automatically by the backend
-      // We just need to update the local state with user data
-      login(result.user);
-      // ninja focus touch >
+      await login(response.credential);
       router.push(PAGE_URLS.PROFILE);
     } catch (error) {
       console.error("Login error:", error);
