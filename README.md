@@ -182,15 +182,7 @@ The frontend will run on `http://localhost:3000`
 
 - [ ] **Add request size limits** - Configure body parser limits to prevent DoS attacks via large payloads
 - [ ] **Implement authentication logging/auditing** - Log authentication attempts (success/failure) with timestamps for security monitoring
-- [ ] **Fix JWT_EXPIRES_IN parsing** - Add proper validation and fail-fast error handling for invalid expiration format
-- [ ] **Add email validation** - Implement email format validation in DTOs to prevent invalid emails from being stored
 - [ ] **Restrict CORS methods** - Limit allowed HTTP methods to only those actually needed per endpoint
-
-### 🟢 Low Priority
-
-- [ ] **Add account enumeration protection** - Ensure generic error messages prevent username/email enumeration (partially addressed)
-- [ ] **Add request ID/tracing** - Implement request ID middleware for better debugging and log correlation
-- [ ] **Use secret management service** - Consider AWS Secrets Manager, HashiCorp Vault, or similar for production secrets instead of plaintext env files
 
 ## Development Commands
 
