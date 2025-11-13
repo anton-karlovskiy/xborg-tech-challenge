@@ -58,13 +58,15 @@ function Signin() {
   const googleSigninCallback = useCallback(async (response: CredentialResponse) => {
     try {
       // Send the Google ID token directly to the backend for verification
-      // The backend will verify the token with Google and extract user information
+      // ninja focus touch <
+      // The backend will verify the token with Google, extract user information,
+      // and set an httpOnly cookie with the JWT token
       const result = await authApi.googleLogin(response.credential);
 
-      // Store token and user data
-      // Note: result.access_token is our backend"s JWT (different from Google"s JWT)
-      // This token is used to authenticate future API requests to our backend
-      login(result.access_token, result.user);
+      // Token is stored in httpOnly cookie automatically by the backend
+      // We just need to update the local state with user data
+      login(result.user);
+      // ninja focus touch >
       router.push(PAGE_URLS.PROFILE);
     } catch (error) {
       console.error("Login error:", error);

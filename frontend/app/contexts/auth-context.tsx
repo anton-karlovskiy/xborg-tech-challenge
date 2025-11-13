@@ -3,10 +3,7 @@
 import {
   createContext,
   useContext,
-  useState,
-  useEffect,
-  useRef,
-  startTransition
+  useEffect
 } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -15,12 +12,14 @@ import {
 } from "@tanstack/react-query";
 
 import {
+  // ninja focus touch <
+  authApi,
+  // ninja focus touch >
   userApi,
   UserProfile
 } from "@/lib/api";
 import {
   PAGE_URLS,
-  LOCAL_STORAGE_KEYS,
   QUERY_KEYS
 } from "@/app/constants";
 import {
@@ -34,45 +33,31 @@ import {
  * (https://kentcdodds.com/blog/authentication-in-react-applications).
  *
  * The provider:
- * - gates rendering until it knows whether a persisted token exists
- * - hydrates the user profile with React Query when a token is present
- * - clears invalid tokens eagerly, keeping the rest of the app isolated
- * - exposes imperative `login`/`logout` helpers that keep localStorage and
- *   the React Query cache in sync
- *
+ * // ninja focus touch <
+ * - gates rendering until it knows authentication status
+ * - hydrates the user profile with React Query
+ * - uses httpOnly cookies for secure token storage (XSS protection)
+ * - exposes imperative `login`/`logout` helpers that keep React Query cache in sync
+ * // ninja focus touch >
  * Downstream components can safely assume that `user` is either a factual
  * profile or `null`, without worrying about loading states or token drift.
  */
 
 const AuthContext = createContext<{
   user: UserProfile | null;
-  login: (token: string, user: UserProfile) => void;
-  logout: () => void;
+  // ninja focus touch <
+  login: (user: UserProfile) => void;
+  logout: () => Promise<void>;
+  // ninja focus touch >
 } | undefined>(undefined);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const queryClient = useQueryClient();
-  const errorHandledRef = useRef(false);
 
-  const [hasToken, setHasToken] = useState(false);
-
-  // Detect any persisted token after mount so the SSR markup stays consistent
-  // with the initial client render. This mirrors the "delay rendering until
-  // auth status is known" approach from the referenced article.
-  useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
-    startTransition(() => {
-      setHasToken(!!token);
-    });
-  }, []);
-
-  // Run the guarded React Query request only when a token exists. Until then,
-  // the rest of the app is held back by the loading state returned below.
+  // ninja focus touch <
+  // Always attempt to fetch user profile - cookies are sent automatically
+  // If no valid cookie exists, the request will fail and user will be null
   const {
     data: user,
     isLoading,
@@ -80,55 +65,58 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   } = useQuery({
     queryKey: QUERY_KEYS.USER_PROFILE,
     queryFn: () => userApi.getProfile(),
-    enabled: hasToken, // Only run query if token exists
     retry: false,
-    staleTime: 5 * 60 * 1000 // 5 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    // Don't throw on 401/403 - these are expected for unauthenticated users
+    throwOnError: false
   });
+  console.log("ninja focus touch: user =>", user);
+  // ninja focus touch >
 
-  // Handle error: remove invalid token
+  // ninja focus touch <
+  // Handle authentication errors - clear cache on auth failures
   useEffect(() => {
-    if (error && hasToken && !errorHandledRef.current) {
-      errorHandledRef.current = true;
-
-      if (typeof window !== "undefined") {
-        localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
-      }
-
-      // Use startTransition to mark state update as non-urgent
-      startTransition(() => {
-        setHasToken(false);
-      });
-
+    if (error) {
+      // Clear user data on authentication errors
       queryClient.removeQueries({ queryKey: QUERY_KEYS.USER_PROFILE });
     }
-    
-    // Reset error handled flag when error clears
-    if (!error) {
-      errorHandledRef.current = false;
-    }
-  }, [error, hasToken, queryClient]);
+  }, [error, queryClient]);
+  // ninja focus touch >
 
   if (isLoading) {
     return <LoadingState />;
   }
   
-  if (error) {
+  // ninja focus touch <
+  // Don't show error state for authentication failures - just treat as unauthenticated
+  // Only show error for unexpected server errors (5xx)
+  if (error && error instanceof Error && !error.message.includes("401") && !error.message.includes("403")) {
     return <ErrorState message={error.message} />;
   }
+  // ninja focus touch >
 
-  const login = (token: string, userData: UserProfile) => {
-    localStorage.setItem(LOCAL_STORAGE_KEYS.TOKEN, token);
-    setHasToken(true);
-    // Set the query data directly to avoid refetch
+  // ninja focus touch <
+  const login = (userData: UserProfile) => {
+    // Token is stored in httpOnly cookie, so we just update the cache
     queryClient.setQueryData(QUERY_KEYS.USER_PROFILE, userData);
   };
+  // ninja focus touch >
 
-  const logout = () => {
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.TOKEN);
-    setHasToken(false);
-    queryClient.removeQueries({ queryKey: QUERY_KEYS.USER_PROFILE });
-    router.push(PAGE_URLS.SIGN_IN);
+  // ninja focus touch <
+  const logout = async () => {
+    try {
+      // Call logout endpoint to clear httpOnly cookie on server
+      await authApi.logout();
+    } catch (error) {
+      // Even if logout fails, clear local state
+      console.error("Logout error:", error);
+    } finally {
+      // Clear React Query cache
+      queryClient.removeQueries({ queryKey: QUERY_KEYS.USER_PROFILE });
+      router.push(PAGE_URLS.SIGN_IN);
+    }
   };
+  // ninja focus touch >
 
   return (
     <AuthContext.Provider value={{ user: user ?? null, login, logout }}>

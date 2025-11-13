@@ -1,13 +1,14 @@
 import axios from "axios";
 
-import { LOCAL_STORAGE_KEYS } from "@/app/constants";
-
 if (!process.env.NEXT_PUBLIC_API_URL) {
   throw new Error("NEXT_PUBLIC_API_URL is not set");
 }
 
 const API_END_POINTS = {
   AUTH_LOGIN_GOOGLE: "/auth/login/google",
+  // ninja focus touch <
+  AUTH_LOGOUT: "/auth/logout",
+  // ninja focus touch >
   USER_PROFILE: "/user/profile"
 };
 
@@ -15,22 +16,13 @@ const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json"
-  }
-});
-
-// Add token to requests
-api.interceptors.request.use(config => {
-  if (typeof window !== "undefined") {
-    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.TOKEN);
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-  }
-  return config;
+  },
+  // ninja focus touch <
+  withCredentials: true // Enable cookies (httpOnly cookies are sent automatically)
+  // ninja focus touch >
 });
 
 interface GoogleLoginResponse {
-  access_token: string;
   user: UserProfile;
 };
 
@@ -57,7 +49,13 @@ const authApi = {
     );
 
     return response.data;
+  },
+  // ninja focus touch <
+  logout: async (): Promise<{ message: string }> => {
+    const response = await api.post<{ message: string }>(API_END_POINTS.AUTH_LOGOUT);
+    return response.data;
   }
+  // ninja focus touch >
 };
 
 const userApi = {
