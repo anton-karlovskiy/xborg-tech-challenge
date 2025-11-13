@@ -46,16 +46,9 @@ export class AuthService {
     const profile = await this.validateGoogleIdToken(idToken);
 
     let user = await this.userRepository.findOne({ where: { googleId: profile.googleId } });
+
     if (!user) {
       user = this.userRepository.create(profile);
-      await this.userRepository.save(user);
-    } else {
-      // keep picture/name fresh (optional)
-      Object.assign(user, {
-        firstName: profile.firstName ?? user.firstName,
-        lastName: profile.lastName ?? user.lastName,
-        picture: profile.picture ?? user.picture
-      });
       await this.userRepository.save(user);
     }
 
