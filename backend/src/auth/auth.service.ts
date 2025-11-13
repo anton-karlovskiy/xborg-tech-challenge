@@ -1,13 +1,13 @@
 import {
   Injectable,
   UnauthorizedException
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { OAuth2Client } from 'google-auth-library';
-import { Repository } from 'typeorm';
-import { JwtService } from '@nestjs/jwt';
+} from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { OAuth2Client } from "google-auth-library";
+import { Repository } from "typeorm";
+import { JwtService } from "@nestjs/jwt";
 
-import { User } from '../user/entities/user.entity';
+import { User } from "../user/entities/user.entity";
 
 @Injectable()
 export class AuthService {
@@ -38,7 +38,7 @@ export class AuthService {
         picture: payload.picture
       };
     } catch {
-      throw new UnauthorizedException('Invalid Google token');
+      throw new UnauthorizedException("Invalid Google token");
     }
   }
 

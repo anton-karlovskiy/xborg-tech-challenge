@@ -6,13 +6,13 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 
-import { useAuth } from '@/app/contexts/auth-context';
+import { useAuth } from "@/app/contexts/auth-context";
 import {
   Card,
   CardHeader
 } from "@/app/components";
 import { authApi } from "@/lib/api";
-import { PAGE_URLS } from '@/app/constants';
+import { PAGE_URLS } from "@/app/constants";
 
 if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
   throw new Error("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
@@ -62,7 +62,7 @@ function Signin() {
       const result = await authApi.googleLogin(response.credential);
 
       // Store token and user data
-      // Note: result.access_token is our backend's JWT (different from Google's JWT)
+      // Note: result.access_token is our backend"s JWT (different from Google"s JWT)
       // This token is used to authenticate future API requests to our backend
       login(result.access_token, result.user);
       router.push(PAGE_URLS.PROFILE);
