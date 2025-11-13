@@ -98,6 +98,8 @@ function Profile() {
     },
     onSuccess: (updatedProfile) => {
       queryClient.setQueryData(QUERY_KEYS.USER_PROFILE, updatedProfile);
+
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USER_PROFILE });
     }
   });
 
