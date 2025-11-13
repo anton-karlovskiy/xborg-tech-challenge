@@ -164,6 +164,34 @@ The frontend will run on `http://localhost:3000`
 - Sessions persist between browser visits
 - The database uses TypeORM's `synchronize: true` for development (disable in production)
 
+## Security Improvements TODO
+
+### 🔴 Critical Priority
+
+- [ ] **Add rate limiting** - Implement `@nestjs/throttler` or similar to prevent brute force attacks on login endpoints
+- [ ] **Disable database synchronization in production** - Set `synchronize: false` and use migrations instead
+- [ ] **Enforce strong JWT secret validation** - Add minimum length/complexity requirements in environment validation schema
+
+### 🟠 High Priority
+
+- [ ] **Implement refresh token mechanism** - Add refresh tokens with shorter access token lifetime to reduce exposure window
+- [ ] **Add token revocation** - Implement token blacklist or refresh token rotation to invalidate compromised tokens
+- [ ] **Improve error handling** - Log detailed errors server-side while returning generic messages to clients to prevent information leakage
+
+### 🟡 Medium Priority
+
+- [ ] **Add request size limits** - Configure body parser limits to prevent DoS attacks via large payloads
+- [ ] **Implement authentication logging/auditing** - Log authentication attempts (success/failure) with timestamps for security monitoring
+- [ ] **Fix JWT_EXPIRES_IN parsing** - Add proper validation and fail-fast error handling for invalid expiration format
+- [ ] **Add email validation** - Implement email format validation in DTOs to prevent invalid emails from being stored
+- [ ] **Restrict CORS methods** - Limit allowed HTTP methods to only those actually needed per endpoint
+
+### 🟢 Low Priority
+
+- [ ] **Add account enumeration protection** - Ensure generic error messages prevent username/email enumeration (partially addressed)
+- [ ] **Add request ID/tracing** - Implement request ID middleware for better debugging and log correlation
+- [ ] **Use secret management service** - Consider AWS Secrets Manager, HashiCorp Vault, or similar for production secrets instead of plaintext env files
+
 ## Development Commands
 
 ### Backend
