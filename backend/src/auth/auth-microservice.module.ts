@@ -1,19 +1,22 @@
 import { Module } from "@nestjs/common";
+import { TypeOrmModule } from "@nestjs/typeorm";
 import { JwtModule } from "@nestjs/jwt";
 import { ConfigService } from "@nestjs/config";
 import { type SignOptions } from "jsonwebtoken";
 
 import { ConfigModule } from "../config/config.module";
-import { JwtStrategy } from "./strategies/jwt.strategy";
+import { DatabaseModule } from "../database/database.module";
+import { AuthMicroservice } from "./auth.microservice";
+import { User } from "../user/entities/user.entity";
 
 /**
- * Auth module for API Gateway.
- * Provides JWT strategy for authentication guards.
- * Note: AuthMicroservice and AuthService are in AuthMicroserviceModule for microservices.
+ * Module for Auth microservice.
  */
 @Module({
   imports: [
     ConfigModule,
+    DatabaseModule,
+    TypeOrmModule.forFeature([User]),
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => {
         const expiresIn = configService.get<string>("JWT_EXPIRES_IN");
@@ -29,7 +32,7 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
       inject: [ConfigService],
     }),
   ],
-  providers: [JwtStrategy],
-  exports: [],
+  controllers: [AuthMicroservice],
 })
-export class AuthModule {}
+export class AuthMicroserviceModule {}
+
