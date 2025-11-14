@@ -1,7 +1,6 @@
 import { Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { JwtModule } from "@nestjs/jwt";
-import { ConfigService } from "@nestjs/config";
 import { type SignOptions } from "jsonwebtoken";
 
 import { AuthService } from "./auth.service";
@@ -16,18 +15,16 @@ import { User } from "../user/entities/user.entity";
   imports: [
     TypeOrmModule.forFeature([User]),
     JwtModule.registerAsync({
-      useFactory: (configService: ConfigService) => {
-        const expiresIn = configService.get<string>("JWT_EXPIRES_IN");
+      useFactory: () => {
         const signOptions: SignOptions = {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          expiresIn: expiresIn as any,
+          expiresIn: process.env.JWT_EXPIRES_IN as any,
         };
         return {
-          secret: configService.get<string>("JWT_SECRET"),
+          secret: process.env.JWT_SECRET,
           signOptions,
         };
       },
-      inject: [ConfigService],
     }),
   ],
   controllers: [AuthController],
