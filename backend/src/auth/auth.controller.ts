@@ -1,20 +1,25 @@
-import {
-  Body,
-  Controller,
-  Post,
-  Res,
-  HttpCode,
-  HttpStatus
-} from "@nestjs/common";
+import { Body, Controller, Post, Res, HttpCode, HttpStatus } from "@nestjs/common";
 import { Response } from "express";
 
 import { AuthService } from "./auth.service";
 import { GoogleLoginDto } from "./dto/google-login.dto";
 
+/**
+ *
+ */
 @Controller("auth")
 export class AuthController {
+  /**
+   *
+   * @param authService
+   */
   constructor(private authService: AuthService) {}
 
+  /**
+   *
+   * @param googleLoginDto
+   * @param res
+   */
   @Post("login/google") // POST /auth/login/google
   async loginGoogle(@Body() googleLoginDto: GoogleLoginDto, @Res() res: Response) {
     const { access_token, user } = await this.authService.loginWithGoogle(googleLoginDto.idToken);
@@ -26,13 +31,17 @@ export class AuthController {
       secure: isProduction, // Only send over HTTPS in production
       sameSite: isProduction ? "strict" : "lax", // CSRF protection
       maxAge: this.getCookieMaxAge(),
-      path: "/"
+      path: "/",
     });
 
     // Return user data (token is in cookie, not response body)
     return res.json({ user });
   }
 
+  /**
+   *
+   * @param res
+   */
   @Post("logout")
   @HttpCode(HttpStatus.OK)
   logout(@Res() res: Response) {
@@ -42,17 +51,20 @@ export class AuthController {
       httpOnly: true,
       secure: isProduction,
       sameSite: isProduction ? "strict" : "lax",
-      path: "/"
+      path: "/",
     });
 
     return res.json({ message: "Logged out successfully" });
   }
 
+  /**
+   *
+   */
   private getCookieMaxAge(): number {
     // Parse JWT_EXPIRES_IN (e.g., "7d", "1h", "30m")
     const expiresIn = process.env.JWT_EXPIRES_IN;
     const match = expiresIn.match(/^(\d+)([dhms])$/);
-    
+
     if (!match) {
       return 24 * 60 * 60 * 1000; // Default to 1 day in milliseconds
     }
@@ -61,10 +73,10 @@ export class AuthController {
     const unit = match[2];
 
     const multipliers: Record<string, number> = {
-      s: 1000,           // seconds to milliseconds
-      m: 60 * 1000,      // minutes to milliseconds
+      s: 1000, // seconds to milliseconds
+      m: 60 * 1000, // minutes to milliseconds
       h: 60 * 60 * 1000, // hours to milliseconds
-      d: 24 * 60 * 60 * 1000 // days to milliseconds
+      d: 24 * 60 * 60 * 1000, // days to milliseconds
     };
 
     return value * (multipliers[unit] || multipliers.d);

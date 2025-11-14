@@ -5,13 +5,10 @@ import { DatabaseModule } from "./database/database.module";
 import { AuthModule } from "./auth/auth.module";
 import { UserModule } from "./user/user.module";
 
+/**
+ *
+ */
 @Module({
-  imports: [
-    ConfigModule,
-    DatabaseModule,
-    AuthModule,
-    UserModule
-  ]
+  imports: [ConfigModule, DatabaseModule, AuthModule, UserModule],
 })
-
 export class AppModule {}

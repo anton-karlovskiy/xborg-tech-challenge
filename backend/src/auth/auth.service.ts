@@ -1,7 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException
-} from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { OAuth2Client } from "google-auth-library";
 import { Repository } from "typeorm";
@@ -9,10 +6,18 @@ import { JwtService } from "@nestjs/jwt";
 
 import { User } from "../user/entities/user.entity";
 
+/**
+ *
+ */
 @Injectable()
 export class AuthService {
   private googleClient: OAuth2Client;
 
+  /**
+   *
+   * @param userRepository
+   * @param jwtService
+   */
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
     private jwtService: JwtService
@@ -20,28 +25,38 @@ export class AuthService {
     this.googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
   }
 
+  /**
+   *
+   * @param idToken
+   */
   async validateGoogleIdToken(idToken: string) {
     try {
       const ticket = await this.googleClient.verifyIdToken({
         idToken,
-        audience: process.env.GOOGLE_CLIENT_ID
+        audience: process.env.GOOGLE_CLIENT_ID,
       });
 
       const payload = ticket.getPayload();
-      if (!payload?.sub || !payload.email) throw new UnauthorizedException("Invalid token");
+      if (!payload?.sub || !payload.email) {
+        throw new UnauthorizedException("Invalid token");
+      }
 
       return {
         googleId: payload.sub,
         email: payload.email,
         firstName: payload.given_name,
         lastName: payload.family_name,
-        picture: payload.picture
+        picture: payload.picture,
       };
     } catch {
       throw new UnauthorizedException("Invalid Google token");
     }
   }
 
+  /**
+   *
+   * @param idToken
+   */
   async loginWithGoogle(idToken: string) {
     const profile = await this.validateGoogleIdToken(idToken);
 

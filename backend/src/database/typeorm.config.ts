@@ -3,7 +3,7 @@ import { TypeOrmModuleOptions } from "@nestjs/typeorm";
 import { User } from "../user/entities/user.entity";
 
 export const typeormConfig = (): TypeOrmModuleOptions => {
-  const type = (process.env.DB_TYPE);
+  const type = process.env.DB_TYPE;
 
   const synchronizeEnabled = process.env.NODE_ENV !== "production";
 
@@ -16,7 +16,7 @@ export const typeormConfig = (): TypeOrmModuleOptions => {
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE || "xborg",
       entities: [User],
-      synchronize: synchronizeEnabled
+      synchronize: synchronizeEnabled,
     };
   }
 
@@ -24,6 +24,6 @@ export const typeormConfig = (): TypeOrmModuleOptions => {
     type: "sqlite",
     database: process.env.DB_DATABASE,
     entities: [User],
-    synchronize: synchronizeEnabled
+    synchronize: synchronizeEnabled,
   };
 };

@@ -3,13 +3,15 @@ import { ConfigModule as NestConfigModule } from "@nestjs/config";
 
 import { envSchema } from "./validation";
 
+/**
+ *
+ */
 @Module({
   imports: [
     NestConfigModule.forRoot({
       isGlobal: true,
-      validationSchema: envSchema
-    })
-  ]
+      validationSchema: envSchema,
+    }),
+  ],
 })
-
 export class ConfigModule {}

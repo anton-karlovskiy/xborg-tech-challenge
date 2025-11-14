@@ -3,9 +3,12 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn
+  UpdateDateColumn,
 } from "typeorm";
 
+/**
+ *
+ */
 @Entity("users")
 export class User {
   @PrimaryGeneratedColumn("uuid")
@@ -32,4 +35,3 @@ export class User {
   @UpdateDateColumn()
   updatedAt!: Date;
 }
-

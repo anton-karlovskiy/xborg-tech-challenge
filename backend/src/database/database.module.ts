@@ -3,8 +3,10 @@ import { TypeOrmModule } from "@nestjs/typeorm";
 
 import { typeormConfig } from "./typeorm.config";
 
+/**
+ *
+ */
 @Module({
-  imports: [TypeOrmModule.forRootAsync({ useFactory: typeormConfig })]
+  imports: [TypeOrmModule.forRootAsync({ useFactory: typeormConfig })],
 })
-
 export class DatabaseModule {}
