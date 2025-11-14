@@ -162,14 +162,13 @@ The frontend will run on `http://localhost:3000`
 - The SQLite database file (`database.sqlite`) will be created automatically on first run
 - JWT tokens are stored in HttpOnly cookies (not localStorage) for enhanced security
 - Sessions persist between browser visits
-- The database uses TypeORM's `synchronize: true` for development (disable in production)
 
 ## Security Improvements TODO
 
 ### 🔴 Critical Priority
 
 - [ ] **Add rate limiting** - Implement `@nestjs/throttler` or similar to prevent brute force attacks on login endpoints
-- [ ] **Disable database synchronization in production** - Set `synchronize: false` and use migrations instead
+- [x] **Disable database synchronization in production** - Set `synchronize: false` and use migrations instead
 - [ ] **Enforce strong JWT secret validation** - Add minimum length/complexity requirements in environment validation schema
 
 ### 🟠 High Priority
