@@ -23,7 +23,7 @@ export function Input({
   ...rest
 }: InputProps) {
   const generatedId = useId();
-  const inputId = id || generatedId;
+  const inputId = id ?? generatedId;
   const hasError = !!error;
 
   const baseStyles = "w-full px-4 py-2 border rounded-lg text-gray-600";

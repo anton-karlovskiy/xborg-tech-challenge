@@ -37,7 +37,7 @@ function ProtectedLayout({
   }
 
   // User is authenticated, render children
-  return <>{children}</>;
+  return children;
 }
 
 export default ProtectedLayout;
