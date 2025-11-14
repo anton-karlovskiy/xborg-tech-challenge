@@ -5,6 +5,15 @@ interface InputProps extends React.ComponentPropsWithRef<"input"> {
   error?: string;
 }
 
+/**
+ *
+ * @param root0
+ * @param root0.label
+ * @param root0.error
+ * @param root0.className
+ * @param root0.id
+ * @param root0.disabled
+ */
 export function Input({
   label,
   error,
@@ -26,21 +35,21 @@ export function Input({
 
   return (
     <div className="space-y-1">
-      {label && (
+      {label ? (
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium text-gray-700">
+          className="block text-sm font-medium text-gray-700"
+        >
           {label}
         </label>
-      )}
+      ) : null}
       <input
         id={inputId}
         className={`${baseStyles} ${stateStyles} ${className}`}
         disabled={disabled}
-        {...rest} />
-      {error && (
-        <p className="text-sm text-red-600">{error}</p>
-      )}
+        {...rest}
+      />
+      {error ? <p className="text-sm text-red-600">{error}</p> : null}
     </div>
   );
 }

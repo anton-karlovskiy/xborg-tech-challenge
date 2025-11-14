@@ -7,15 +7,15 @@ if (!process.env.NEXT_PUBLIC_API_URL) {
 const API_END_POINTS = {
   AUTH_LOGIN_GOOGLE: "/auth/login/google",
   AUTH_LOGOUT: "/auth/logout",
-  USER_PROFILE: "/user/profile"
+  USER_PROFILE: "/user/profile",
 };
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   headers: {
-    "Content-Type": "application/json"
+    "Content-Type": "application/json",
   },
-  withCredentials: true // Enable cookies (httpOnly cookies are sent automatically by the browser)
+  withCredentials: true, // Enable cookies (httpOnly cookies are sent automatically by the browser)
 });
 
 interface GoogleLoginResponse {
@@ -48,9 +48,9 @@ const authApi = {
   },
   logout: async (): Promise<{ message: string }> => {
     const response = await api.post<{ message: string }>(API_END_POINTS.AUTH_LOGOUT);
-    
+
     return response.data;
-  }
+  },
 };
 
 const userApi = {
@@ -63,7 +63,7 @@ const userApi = {
     const response = await api.put<UserProfile>(API_END_POINTS.USER_PROFILE, data);
 
     return response.data;
-  }
+  },
 };
 
 export type {

@@ -14,7 +14,7 @@ import {
 import {
   authApi,
   userApi,
-  UserProfile
+  type UserProfile
 } from "@/lib/api";
 import {
   PAGE_URLS,
@@ -35,7 +35,7 @@ import {
  * - hydrates the user profile with React Query
  * - uses httpOnly cookies for secure token storage (XSS protection)
  * - exposes imperative `login`/`logout` helpers that keep React Query cache in sync
- * 
+ *
  * Downstream components can safely assume that `user` is either a factual
  * profile or `null`, without worrying about loading states or token drift.
  */
@@ -44,8 +44,13 @@ const AuthContext = createContext<{
   user: UserProfile | null;
   login: (googleIdToken: string) => Promise<void>;
   logout: () => Promise<void>;
-} | undefined>(undefined);
+    } | undefined>(undefined);
 
+/**
+ *
+ * @param root0
+ * @param root0.children
+ */
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -56,12 +61,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     data: user,
     isLoading,
     error,
-    refetch
+    refetch,
   } = useQuery({
     queryKey: QUERY_KEYS.USER_PROFILE,
     queryFn: () => userApi.getProfile(),
     retry: false,
-    staleTime: 5 * 60 * 1000 // 5 minutes
+    staleTime: 5 * 60 * 1000, // 5 minutes
   });
 
   // Handle authentication errors - clear cache on auth failures
@@ -75,7 +80,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   if (isLoading) {
     return <LoadingState />;
   }
-  
+
   // Don't show error state for authentication failures - just treat as unauthenticated
   // Only show error for unexpected server errors (5xx)
   if (error && error instanceof Error && !error.message.includes("401") && !error.message.includes("403")) {
@@ -117,12 +122,15 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 };
 
+/**
+ *
+ */
 function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
     throw new Error("useAuth must be used within an AuthProvider");
   }
-  
+
   return context;
 };
 

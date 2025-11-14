@@ -9,13 +9,15 @@ import { PAGE_URLS } from "@/app/constants";
 /**
  * Protected Layout - Handles authentication for all routes in this group.
  * This is "higher in the tree" - all child pages are automatically protected.
- * 
+ *
  * Routes in this group:
  * - /profile
  * - Any other routes you add here
+ * @param root0
+ * @param root0.children
  */
 function ProtectedLayout({
-  children
+  children,
 }: {
   children: React.ReactNode;
 }) {

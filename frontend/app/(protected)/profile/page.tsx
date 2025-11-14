@@ -24,34 +24,43 @@ import {
 } from "@/app/components";
 import {
   userApi,
-  UpdateUserProfile
+  type UpdateUserProfile
 } from "@/lib/api";
 import { QUERY_KEYS } from "@/app/constants";
 
+/**
+ *
+ */
 function SubmitButton() {
   const { pending } = useFormStatus();
-  
+
   return (
     <Button
       type="submit"
       variant="primary"
       disabled={pending}
-      fullWidth>
+      fullWidth
+    >
       {pending ? "Saving..." : "Save Changes"}
     </Button>
   );
 }
 
+/**
+ *
+ * @param props
+ */
 function CancelButton(props: ButtonProps) {
   const { pending } = useFormStatus();
-  
+
   return (
     <Button
       type="button"
       variant="secondary"
       disabled={pending}
       fullWidth
-      {...props}>
+      {...props}
+    >
       Cancel
     </Button>
   );
@@ -66,6 +75,9 @@ const FIRST_NAME_FIELD = "firstName";
 const LAST_NAME_FIELD = "lastName";
 const EMAIL_FIELD = "email";
 
+/**
+ *
+ */
 function Profile() {
   const { user, logout } = useAuth();
 
@@ -100,7 +112,7 @@ function Profile() {
       queryClient.setQueryData(QUERY_KEYS.USER_PROFILE, updatedProfile);
 
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.USER_PROFILE });
-    }
+    },
   });
 
   const updateProfile = async (
@@ -110,30 +122,30 @@ function Profile() {
     try {
       const updateData: UpdateUserProfile = {
         firstName: String(formData.get(FIRST_NAME_FIELD)) || undefined,
-        lastName: String(formData.get(LAST_NAME_FIELD)) || undefined
+        lastName: String(formData.get(LAST_NAME_FIELD)) || undefined,
       };
       await updateProfileMutation.mutateAsync(updateData);
 
       setSuccessAlertDisplayable(true);
       resetSuccessAlertTimer();
-      
+
       return { error: null, success: true };
     } catch (error) {
       console.error("Failed to update profile:", error);
 
       setSuccessAlertDisplayable(false);
       cancelSuccessAlertTimer();
-      
+
       return {
         error: error instanceof Error ? error.message : "Failed to update profile. Please try again.",
-        success: false
+        success: false,
       };
     }
   };
 
   const [state, formAction] = useActionState(updateProfile, {
     error: null,
-    success: false
+    success: false,
   });
 
   return (
@@ -142,22 +154,25 @@ function Profile() {
         <Card className="space-y-8">
           <CardHeader
             title="Profile"
-            action={
+            action={(
               <Button
                 variant="danger"
-                onClick={logout}>
+                onClick={logout}
+              >
                 Sign Out
               </Button>
-            } />
+            )}
+          />
           <div className="space-y-6">
             {/* Profile Picture */}
-            {user.picture && (
+            {user.picture ? (
               <Avatar
                 src={user.picture}
                 alt="Profile"
                 size={128}
-                className="mx-auto" />
-            )}
+                className="mx-auto"
+              />
+            ) : null}
             {/* Email (read-only) */}
             <Input
               id={emailId}
@@ -165,7 +180,8 @@ function Profile() {
               label="Email"
               value={user.email}
               readOnly
-              disabled />
+              disabled
+            />
             <form action={formAction} className="space-y-6">
               {/* First Name */}
               <Input
@@ -175,7 +191,8 @@ function Profile() {
                 label="First Name"
                 defaultValue={user.firstName ?? ""}
                 disabled={!isEditing}
-                required />
+                required
+              />
               {/* Last Name */}
               <Input
                 id={lastNameId}
@@ -184,15 +201,12 @@ function Profile() {
                 label="Last Name"
                 defaultValue={user.lastName ?? ""}
                 disabled={!isEditing}
-                required />
+                required
+              />
               {/* Error Message */}
-              {isEditing && state.error && (
-                <Alert variant="error">{state.error}</Alert>
-              )}
+              {isEditing && state.error ? <Alert variant="error">{state.error}</Alert> : null}
               {/* Success Message */}
-              {isEditing && state.success && successAlertDisplayable && (
-                <Alert variant="success">Profile updated successfully</Alert>
-              )}
+              {isEditing && state.success && successAlertDisplayable ? <Alert variant="success">Profile updated successfully</Alert> : null}
               {/* Action Buttons */}
               <div className="flex gap-4 pt-4">
                 {isEditing ? (
@@ -204,7 +218,8 @@ function Profile() {
                   <Button
                     type="button"
                     onClick={() => setIsEditing(true)}
-                    fullWidth>
+                    fullWidth
+                  >
                     Edit Profile
                   </Button>
                 )}

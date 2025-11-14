@@ -3,9 +3,15 @@ interface LoadingStateProps {
   className?: string;
 }
 
+/**
+ *
+ * @param root0
+ * @param root0.message
+ * @param root0.className
+ */
 function LoadingState({
   message = "Loading...",
-  className = ""
+  className = "",
 }: LoadingStateProps) {
   return (
     <div className={`min-h-screen flex items-center justify-center ${className}`}>

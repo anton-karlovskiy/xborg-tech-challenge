@@ -49,6 +49,9 @@ declare global {
 
 const STR_GOOGLE_SIGNIN_BUTTON = "google-signin-button";
 
+/**
+ *
+ */
 function Signin() {
   const router = useRouter();
 
@@ -82,7 +85,7 @@ function Signin() {
       if (window.google) {
         window.google.accounts.id.initialize({
           client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
-          callback: googleSigninCallback
+          callback: googleSigninCallback,
         });
 
         window.google.accounts.id.renderButton(
@@ -90,7 +93,7 @@ function Signin() {
           {
             theme: "outline",
             size: "large",
-            width: 300
+            width: 300,
           }
         );
       }
@@ -108,9 +111,10 @@ function Signin() {
           <CardHeader
             title="Welcome"
             description="Sign in with your Google account to continue"
-            className="text-center" />
+            className="text-center"
+          />
           <div className="flex justify-center">
-            <div id={STR_GOOGLE_SIGNIN_BUTTON}></div>
+            <div id={STR_GOOGLE_SIGNIN_BUTTON} />
           </div>
         </Card>
       </div>

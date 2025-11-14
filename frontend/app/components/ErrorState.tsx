@@ -3,9 +3,15 @@ interface ErrorStateProps {
   className?: string;
 }
 
+/**
+ *
+ * @param root0
+ * @param root0.message
+ * @param root0.className
+ */
 function ErrorState({
   message,
-  className = ""
+  className = "",
 }: ErrorStateProps) {
   return (
     <div className={`min-h-screen flex items-center justify-center ${className}`}>

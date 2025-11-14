@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "lint:next": "next lint"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.7",
@@ -22,8 +24,13 @@
     "@types/node": "^20.10.6",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@typescript-eslint/eslint-plugin": "^8.46.3",
+    "@typescript-eslint/parser": "^8.46.3",
     "eslint": "9.39.1",
     "eslint-config-next": "^16.0.1",
+    "eslint-plugin-jsdoc": "^61.2.1",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
     "postcss": "^8.4.32",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3"

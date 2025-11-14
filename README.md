@@ -196,3 +196,31 @@ The frontend will run on `http://localhost:3000`
 - `npm run dev` - Start development server
 - `npm run build` - Build for production
 - `npm run start` - Start production server
+- `npm run lint` - Run ESLint to check code style (fails on warnings)
+- `npm run lint:fix` - Run ESLint and automatically fix fixable issues
+- `npm run lint:next` - Run Next.js's built-in lint command (may have compatibility issues with ESLint 9 flat config)
+
+#### Code Style
+
+The frontend follows **Google's JavaScript and TypeScript Style Guide** with ESLint enforcement. Key standards include:
+
+- **Semicolons**: Required
+- **Indentation**: 2 spaces
+- **Quotes**: Double quotes for strings and JSX
+- **Trailing commas**: Required in multiline arrays/objects, not allowed in function parameters
+- **Line length**: Maximum 100 characters
+- **Function style**: Function declarations for named functions, arrow functions for callbacks
+- **TypeScript**: Prefer interfaces over type aliases, use type imports for types
+- **React**: Function declarations for named components, arrow functions for unnamed components
+- **JSDoc**: Required for exported functions (warnings only)
+
+The ESLint configuration is located in `frontend/eslint.config.mjs` and includes:
+- Google style guide rules
+- TypeScript-specific rules with type-aware linting
+- React and React Hooks rules
+- JSDoc documentation requirements
+- Next.js recommended rules
+
+Run `npm run lint` to check your code, or `npm run lint:fix` to automatically fix many style issues.
+
+**Note:** The `lint` script uses ESLint directly (`eslint .`) instead of Next.js's `next lint` command, as Next.js 16 may have compatibility issues with ESLint 9's flat config format (`eslint.config.mjs`). If you need to use Next.js's lint command, use `npm run lint:next`, but be aware it may not work correctly with the flat config.

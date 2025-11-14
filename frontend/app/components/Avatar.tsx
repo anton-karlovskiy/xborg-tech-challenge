@@ -4,6 +4,13 @@ interface AvatarProps extends ImageProps {
   size?: number;
 }
 
+/**
+ *
+ * @param root0
+ * @param root0.alt
+ * @param root0.size
+ * @param root0.className
+ */
 function Avatar({
   alt = "Profile",
   size,
@@ -17,7 +24,8 @@ function Avatar({
       height={size}
       priority
       className={`rounded-full border-4 border-indigo-500 ${className}`}
-      {...rest} />
+      {...rest}
+    />
   );
 }
 
