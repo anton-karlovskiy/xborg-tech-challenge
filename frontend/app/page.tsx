@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation";
+import { redirect } from "";
 
 import { PAGE_URLS } from "@/app/constants";
 
