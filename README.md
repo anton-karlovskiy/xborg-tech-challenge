@@ -217,3 +217,41 @@ Both frontend and backend follow **Google's JavaScript/TypeScript Style Guide** 
 **Frontend**: React TypeScript patterns, function declarations for components
 
 ESLint configs: `backend/eslint.config.mjs` and `frontend/eslint.config.mjs`
+
+## Pre-commit Hooks
+
+This repository uses **Husky** and **lint-staged** to automatically run linting and formatting checks before commits. This ensures code quality and consistency across the codebase.
+
+### Setup
+
+Pre-commit hooks are automatically set up when you install dependencies at the root:
+
+```bash
+npm install
+```
+
+### How It Works
+
+- **Pre-commit hook**: Automatically runs on `git commit`
+- **Linting**: ESLint checks staged files and auto-fixes issues where possible
+- **Formatting**: Prettier formats staged files automatically
+- **Blocking**: Commits are blocked if there are unfixable linting errors
+
+### What Gets Checked
+
+- **Backend files** (`backend/**/*.{ts,js,json}`): ESLint + Prettier
+- **Frontend files** (`frontend/**/*.{ts,tsx,js,jsx,json,css}`): ESLint + Prettier
+
+### Manual Testing
+
+You can test the pre-commit hook manually:
+
+```bash
+# Stage some files
+git add backend/src/some-file.ts
+
+# Try to commit (will trigger lint-staged)
+git commit -m "test commit"
+```
+
+If there are fixable issues, they'll be automatically fixed and you'll need to stage the changes again. If there are unfixable errors, the commit will be blocked.

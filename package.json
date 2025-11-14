@@ -1,0 +1,13 @@
+{
+  "name": "xborg-tech-challenge",
+  "version": "1.0.0",
+  "private": true,
+  "description": "XBorg Tech Challenge - Full Stack Application",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.2.11"
+  }
+}
