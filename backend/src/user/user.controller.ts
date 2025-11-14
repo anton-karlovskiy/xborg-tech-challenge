@@ -10,19 +10,22 @@ interface AuthenticatedRequest extends ExpressRequest {
 }
 
 /**
- *
+ * Controller for handling user profile operations.
  */
 @Controller("user")
 export class UserController {
   /**
+   * Creates an instance of UserController.
    *
-   * @param userService
+   * @param userService - The user service instance.
    */
   constructor(private readonly userService: UserService) {}
 
   /**
+   * Retrieves the current user's profile.
    *
-   * @param req
+   * @param req - Authenticated request containing user information.
+   * @returns User profile object.
    */
   @UseGuards(JwtAuthGuard)
   @Get("profile")
@@ -31,9 +34,11 @@ export class UserController {
   }
 
   /**
+   * Updates the current user's profile.
    *
-   * @param req
-   * @param updateProfileDto
+   * @param req - Authenticated request containing user information.
+   * @param updateProfileDto - DTO containing profile fields to update.
+   * @returns Updated user profile object.
    */
   @UseGuards(JwtAuthGuard)
   @Put("profile")

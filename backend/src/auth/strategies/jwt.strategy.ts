@@ -4,12 +4,12 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { type Request } from "express";
 
 /**
- *
+ * JWT authentication strategy for Passport.
  */
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   /**
-   *
+   * Creates an instance of JwtStrategy.
    */
   constructor() {
     super({
@@ -27,10 +27,12 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   /**
+   * Validates JWT payload and returns user information.
    *
-   * @param payload
-   * @param payload.sub
-   * @param payload.email
+   * @param payload - JWT payload containing user ID and email.
+   * @param payload.sub - User ID from JWT subject claim.
+   * @param payload.email - User email from JWT payload.
+   * @returns User object with id and email.
    */
   async validate(payload: { sub: string; email: string }) {
     return { id: payload.sub, email: payload.email };

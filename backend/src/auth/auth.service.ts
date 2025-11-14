@@ -7,16 +7,17 @@ import { JwtService } from "@nestjs/jwt";
 import { User } from "../user/entities/user.entity";
 
 /**
- *
+ * Service for handling authentication logic including Google OAuth.
  */
 @Injectable()
 export class AuthService {
   private googleClient: OAuth2Client;
 
   /**
+   * Creates an instance of AuthService.
    *
-   * @param userRepository
-   * @param jwtService
+   * @param userRepository - TypeORM repository for User entity.
+   * @param jwtService - Service for JWT token operations.
    */
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
@@ -26,8 +27,10 @@ export class AuthService {
   }
 
   /**
+   * Validates a Google ID token and extracts user profile information.
    *
-   * @param idToken
+   * @param idToken - Google ID token string.
+   * @returns User profile object with googleId, email, firstName, lastName, and picture.
    */
   async validateGoogleIdToken(idToken: string) {
     try {
@@ -54,8 +57,10 @@ export class AuthService {
   }
 
   /**
+   * Authenticates user with Google ID token and returns JWT access token.
    *
-   * @param idToken
+   * @param idToken - Google ID token string.
+   * @returns Object containing access_token and user data.
    */
   async loginWithGoogle(idToken: string) {
     const profile = await this.validateGoogleIdToken(idToken);

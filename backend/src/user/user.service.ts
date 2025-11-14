@@ -6,13 +6,14 @@ import { User } from "./entities/user.entity";
 import { type UpdateProfileDto } from "./dto/update-profile.dto";
 
 /**
- *
+ * Service for handling user-related business logic.
  */
 @Injectable()
 export class UserService {
   /**
+   * Creates an instance of UserService.
    *
-   * @param userRepository
+   * @param userRepository - TypeORM repository for User entity.
    */
   constructor(
     @InjectRepository(User)
@@ -20,8 +21,10 @@ export class UserService {
   ) {}
 
   /**
+   * Retrieves a user profile by ID.
    *
-   * @param id
+   * @param id - User ID (UUID).
+   * @returns User entity object.
    */
   async readProfile(id: string): Promise<User> {
     const user = await this.userRepository.findOne({ where: { id } });
@@ -33,9 +36,11 @@ export class UserService {
   }
 
   /**
+   * Updates a user's profile information.
    *
-   * @param id
-   * @param updateProfileDto
+   * @param id - User ID (UUID).
+   * @param updateProfileDto - DTO containing profile fields to update.
+   * @returns Updated user entity object.
    */
   async updateProfile(id: string, updateProfileDto: UpdateProfileDto): Promise<User> {
     const user = await this.readProfile(id);

@@ -19,6 +19,7 @@ import { User } from "../user/entities/user.entity";
       useFactory: (configService: ConfigService) => {
         const expiresIn = configService.get<string>("JWT_EXPIRES_IN");
         const signOptions: SignOptions = {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           expiresIn: expiresIn as any,
         };
         return {

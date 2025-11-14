@@ -7,7 +7,7 @@ import helmet from "helmet";
 import { AppModule } from "./app.module";
 
 /**
- *
+ * Bootstraps the NestJS application and starts the server.
  */
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

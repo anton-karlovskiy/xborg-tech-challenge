@@ -5,20 +5,23 @@ import { AuthService } from "./auth.service";
 import { GoogleLoginDto } from "./dto/google-login.dto";
 
 /**
- *
+ * Controller for handling authentication-related endpoints.
  */
 @Controller("auth")
 export class AuthController {
   /**
+   * Creates an instance of AuthController.
    *
-   * @param authService
+   * @param authService - The authentication service instance.
    */
   constructor(private authService: AuthService) {}
 
   /**
+   * Handles Google OAuth login and sets JWT token in httpOnly cookie.
    *
-   * @param googleLoginDto
-   * @param res
+   * @param googleLoginDto - DTO containing Google ID token.
+   * @param res - Express response object for setting cookies.
+   * @returns User data object.
    */
   @Post("login/google") // POST /auth/login/google
   async loginGoogle(@Body() googleLoginDto: GoogleLoginDto, @Res() res: Response) {
@@ -39,8 +42,10 @@ export class AuthController {
   }
 
   /**
+   * Handles user logout by clearing the JWT cookie.
    *
-   * @param res
+   * @param res - Express response object for clearing cookies.
+   * @returns Success message object.
    */
   @Post("logout")
   @HttpCode(HttpStatus.OK)
@@ -58,7 +63,9 @@ export class AuthController {
   }
 
   /**
+   * Calculates cookie max age in milliseconds based on JWT_EXPIRES_IN environment variable.
    *
+   * @returns Cookie max age in milliseconds.
    */
   private getCookieMaxAge(): number {
     // Parse JWT_EXPIRES_IN (e.g., "7d", "1h", "30m")
