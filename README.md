@@ -109,14 +109,15 @@ The frontend will run on `http://localhost:3000`
 
 ### Authentication
 
-  - The frontend follows the "Authenticated vs Unauthenticated App" pattern described by Kent C. Dodds, where the root auth context decides whether to render the protected tree or the public screens. [Authentication in React Applications](https://kentcdodds.com/blog/authentication-in-react-applications)
-  - **Security Best Practice**: localStorage is vulnerable to XSS attacks, and moving JWTs into HttpOnly cookies is the standard way to harden authentication in modern web apps. This application uses HttpOnly cookies for JWT storage, which prevents JavaScript access to tokens and significantly reduces the risk of XSS-based token theft.
+- **HttpOnly Cookies**: JWTs are stored in HttpOnly cookies (not localStorage) to prevent XSS attacks
+- **Frontend Pattern**: Uses "Authenticated vs Unauthenticated App" pattern with root auth context ([Kent C. Dodds](https://kentcdodds.com/blog/authentication-in-react-applications))
+- **Backend Security**: JWT validation via Passport strategy, supports both cookie and Bearer token authentication
 
-### React + TypeScript
+### Code Standards
 
-  - We follow the community-maintained React TypeScript Cheatsheet for patterns, type helpers, and example usage across the codebase.[^1]
-
-[^1]: https://github.com/typescript-cheatsheets/react
+- **Frontend**: Follows [React TypeScript Cheatsheet](https://github.com/typescript-cheatsheets/react) patterns
+- **Backend**: NestJS best practices with dependency injection, TypeORM repositories, and JSDoc documentation
+- **Both**: Google JavaScript/TypeScript Style Guide enforced via ESLint
 
 ## API Endpoints
 
@@ -187,40 +188,32 @@ The frontend will run on `http://localhost:3000`
 
 ### Backend
 
-- `npm run start:dev` - Start development server with hot reload
+- `npm run start:dev` - Development server with hot reload
 - `npm run build` - Build for production
-- `npm run start:prod` - Start production server
+- `npm run start:prod` - Production server
+- `npm run lint` - Run ESLint (fails on warnings)
+- `npm run lint:fix` - Auto-fix ESLint issues
+- `npm run test` - Run tests
 
 ### Frontend
 
-- `npm run dev` - Start development server
+- `npm run dev` - Development server
 - `npm run build` - Build for production
-- `npm run start` - Start production server
-- `npm run lint` - Run ESLint to check code style (fails on warnings)
-- `npm run lint:fix` - Run ESLint and automatically fix fixable issues
-- `npm run lint:next` - Run Next.js's built-in lint command (may have compatibility issues with ESLint 9 flat config)
+- `npm run start` - Production server
+- `npm run lint` - Run ESLint (fails on warnings)
+- `npm run lint:fix` - Auto-fix ESLint issues
 
-#### Code Style
+## Code Style
 
-The frontend follows **Google's JavaScript and TypeScript Style Guide** with ESLint enforcement. Key standards include:
+Both frontend and backend follow **Google's JavaScript/TypeScript Style Guide** enforced via ESLint 9 (flat config):
 
 - **Semicolons**: Required
-- **Indentation**: 2 spaces
-- **Quotes**: Double quotes for strings and JSX
-- **Trailing commas**: Required in multiline arrays/objects, not allowed in function parameters
-- **Line length**: Maximum 100 characters
-- **Function style**: Function declarations for named functions, arrow functions for callbacks
-- **TypeScript**: Prefer interfaces over type aliases, use type imports for types
-- **React**: Function declarations for named components, arrow functions for unnamed components
-- **JSDoc**: Required for exported functions (warnings only)
+- **Quotes**: Double quotes
+- **Line length**: Max 100 characters
+- **TypeScript**: Interfaces over types, type imports for types
+- **JSDoc**: Required for public APIs (warnings only)
 
-The ESLint configuration is located in `frontend/eslint.config.mjs` and includes:
-- Google style guide rules
-- TypeScript-specific rules with type-aware linting
-- React and React Hooks rules
-- JSDoc documentation requirements
-- Next.js recommended rules
+**Backend**: NestJS patterns, TypeORM repositories, JSDoc documentation  
+**Frontend**: React TypeScript patterns, function declarations for components
 
-Run `npm run lint` to check your code, or `npm run lint:fix` to automatically fix many style issues.
-
-**Note:** The `lint` script uses ESLint directly (`eslint .`) instead of Next.js's `next lint` command, as Next.js 16 may have compatibility issues with ESLint 9's flat config format (`eslint.config.mjs`). If you need to use Next.js's lint command, use `npm run lint:next`, but be aware it may not work correctly with the flat config.
+ESLint configs: `backend/eslint.config.mjs` and `frontend/eslint.config.mjs`
