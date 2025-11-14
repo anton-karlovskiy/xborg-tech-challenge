@@ -46,28 +46,40 @@ module.exports = {
   // Backend files
   "backend/**/*.{ts,js,json}": (filenames) => {
     const prettierCmd = createCommand("backend", "prettier --write", filenames);
-    const eslintCmd = createCommand("backend", "eslint --fix --max-warnings=0", filenames);
+    // Filter out JSON files from ESLint (only lint TS/JS files)
+    const eslintFiles = filenames.filter((f) => f.endsWith(".ts") || f.endsWith(".js"));
+    const eslintCmd = eslintFiles.length > 0 
+      ? createCommand("backend", "eslint --fix --max-warnings=0", eslintFiles)
+      : null;
     const gitPaths = getGitPaths(filenames);
     
-    return [
-      prettierCmd,
-      eslintCmd,
-      // Add files back to staging after fixes (use relative paths)
-      `git add ${gitPaths.map((f) => `"${f}"`).join(" ")}`,
-    ];
+    const commands = [prettierCmd];
+    if (eslintCmd) {
+      commands.push(eslintCmd);
+    }
+    commands.push(`git add ${gitPaths.map((f) => `"${f}"`).join(" ")}`);
+    
+    return commands;
   },
   // Frontend files
   "frontend/**/*.{ts,tsx,js,jsx,json,css}": (filenames) => {
     const prettierCmd = createCommand("frontend", "prettier --write", filenames);
-    const eslintCmd = createCommand("frontend", "eslint --fix --max-warnings=0", filenames);
+    // Filter out JSON and CSS files from ESLint (only lint TS/TSX/JS/JSX files)
+    const eslintFiles = filenames.filter((f) => 
+      f.endsWith(".ts") || f.endsWith(".tsx") || f.endsWith(".js") || f.endsWith(".jsx")
+    );
+    const eslintCmd = eslintFiles.length > 0 
+      ? createCommand("frontend", "eslint --fix --max-warnings=0", eslintFiles)
+      : null;
     const gitPaths = getGitPaths(filenames);
     
-    return [
-      prettierCmd,
-      eslintCmd,
-      // Add files back to staging after fixes (use relative paths)
-      `git add ${gitPaths.map((f) => `"${f}"`).join(" ")}`,
-    ];
+    const commands = [prettierCmd];
+    if (eslintCmd) {
+      commands.push(eslintCmd);
+    }
+    commands.push(`git add ${gitPaths.map((f) => `"${f}"`).join(" ")}`);
+    
+    return commands;
   },
 };
 

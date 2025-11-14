@@ -310,6 +310,18 @@ const config = [
           fixStyle: "inline-type-imports",
         },
       ], // Google style: use type imports for types
+      // Disallow empty import strings
+      "@typescript-eslint/no-restricted-imports": [
+        "error",
+        {
+          paths: [
+            {
+              name: "",
+              message: "Empty import string is not allowed. Please specify a valid module path.",
+            },
+          ],
+        },
+      ],
       "@typescript-eslint/no-empty-function": "warn",
       "@typescript-eslint/no-inferrable-types": "error", // Don't annotate obvious types
       "@typescript-eslint/no-unused-expressions": "error",
