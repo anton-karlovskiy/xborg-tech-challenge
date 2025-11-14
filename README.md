@@ -254,4 +254,4 @@ git add backend/src/some-file.ts
 git commit -m "test commit"
 ```
 
-If there are fixable issues, they'll be automatically fixed and you'll need to stage the changes again. If there are unfixable errors, the commit will be blocked.
+Fixable issues will be automatically corrected and re-staged. If unfixable errors remain, the commit will be prevented.
