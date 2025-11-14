@@ -6,12 +6,13 @@ interface CardHeaderProps {
 }
 
 /**
- *
- * @param root0
- * @param root0.title
- * @param root0.description
- * @param root0.action
- * @param root0.className
+ * Card header component with title, description, and optional action.
+ * @param root0 - The props object
+ * @param root0.title - The header title text
+ * @param root0.description - Optional description text below the title
+ * @param root0.action - Optional action element (e.g., button) to display on the right
+ * @param root0.className - Additional CSS classes to apply
+ * @returns The card header component JSX
  */
 function CardHeader({
   title,

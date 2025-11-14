@@ -47,9 +47,10 @@ const AuthContext = createContext<{
     } | undefined>(undefined);
 
 /**
- *
- * @param root0
- * @param root0.children
+ * Auth provider component that manages authentication state and provides auth context.
+ * @param root0 - The props object
+ * @param root0.children - The child components to render
+ * @returns The auth provider component JSX
  */
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -123,7 +124,9 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 };
 
 /**
- *
+ * Hook to access authentication context.
+ * Must be used within an AuthProvider.
+ * @returns The authentication context with user, login, and logout
  */
 function useAuth() {
   const context = useContext(AuthContext);

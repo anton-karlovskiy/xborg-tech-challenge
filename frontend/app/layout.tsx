@@ -13,9 +13,11 @@ export const metadata: Metadata = {
 };
 
 /**
- *
- * @param root0
- * @param root0.children
+ * Root layout component that wraps the entire application.
+ * Provides providers and global styling.
+ * @param root0 - The props object
+ * @param root0.children - The child components to render
+ * @returns The root layout JSX
  */
 export default function RootLayout({
   children,

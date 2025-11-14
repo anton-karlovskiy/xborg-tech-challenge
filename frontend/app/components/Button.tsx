@@ -4,12 +4,13 @@ interface ButtonProps extends React.ComponentPropsWithRef<"button"> {
 }
 
 /**
- *
- * @param root0
- * @param root0.variant
- * @param root0.children
- * @param root0.fullWidth
- * @param root0.className
+ * Button component with multiple variants and styling options.
+ * @param root0 - The props object
+ * @param root0.variant - The button variant (primary, secondary, danger)
+ * @param root0.children - The button content
+ * @param root0.fullWidth - Whether the button should take full width
+ * @param root0.className - Additional CSS classes to apply
+ * @returns The button component JSX
  */
 function Button({
   variant = "primary",

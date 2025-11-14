@@ -4,10 +4,11 @@ interface ErrorStateProps {
 }
 
 /**
- *
- * @param root0
- * @param root0.message
- * @param root0.className
+ * Error state component for displaying error messages.
+ * @param root0 - The props object
+ * @param root0.message - The error message to display
+ * @param root0.className - Additional CSS classes to apply
+ * @returns The error state component JSX
  */
 function ErrorState({
   message,

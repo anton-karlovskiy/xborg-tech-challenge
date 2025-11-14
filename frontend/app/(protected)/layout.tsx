@@ -13,8 +13,9 @@ import { PAGE_URLS } from "@/app/constants";
  * Routes in this group:
  * - /profile
  * - Any other routes you add here
- * @param root0
- * @param root0.children
+ * @param root0 - The props object
+ * @param root0.children - The child components to render when authenticated
+ * @returns The authenticated children or null if redirecting
  */
 function ProtectedLayout({
   children,

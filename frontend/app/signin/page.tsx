@@ -50,7 +50,8 @@ declare global {
 const STR_GOOGLE_SIGNIN_BUTTON = "google-signin-button";
 
 /**
- *
+ * Sign-in page component with Google OAuth integration.
+ * @returns The sign-in page component JSX
  */
 function Signin() {
   const router = useRouter();
@@ -83,8 +84,12 @@ function Signin() {
 
     script.onload = () => {
       if (window.google) {
+        const clientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+        if (!clientId) {
+          throw new Error("NEXT_PUBLIC_GOOGLE_CLIENT_ID is not set");
+        }
         window.google.accounts.id.initialize({
-          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!,
+          client_id: clientId,
           callback: googleSigninCallback,
         });
 

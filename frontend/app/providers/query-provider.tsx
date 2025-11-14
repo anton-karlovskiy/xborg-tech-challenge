@@ -4,9 +4,11 @@ import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 /**
- *
- * @param root0
- * @param root0.children
+ * Query provider component that wraps the application with React Query client.
+ * Creates a new QueryClient instance for each request (SSR-safe).
+ * @param root0 - The props object
+ * @param root0.children - The child components to render
+ * @returns The query provider component JSX
  */
 function QueryProvider({ children }: { children: React.ReactNode }) {
   // Create a new QueryClient instance for each request (SSR-safe)

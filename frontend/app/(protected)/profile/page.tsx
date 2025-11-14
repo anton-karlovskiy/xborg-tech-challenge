@@ -29,7 +29,9 @@ import {
 import { QUERY_KEYS } from "@/app/constants";
 
 /**
- *
+ * Submit button component for the profile form.
+ * Shows loading state while the form is submitting.
+ * @returns The submit button component JSX
  */
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -47,8 +49,9 @@ function SubmitButton() {
 }
 
 /**
- *
- * @param props
+ * Cancel button component for the profile form.
+ * @param props - Button props to pass through
+ * @returns The cancel button component JSX
  */
 function CancelButton(props: ButtonProps) {
   const { pending } = useFormStatus();
@@ -76,7 +79,8 @@ const LAST_NAME_FIELD = "lastName";
 const EMAIL_FIELD = "email";
 
 /**
- *
+ * Profile page component for viewing and editing user profile information.
+ * @returns The profile page component JSX
  */
 function Profile() {
   const { user, logout } = useAuth();

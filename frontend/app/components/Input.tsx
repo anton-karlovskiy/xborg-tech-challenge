@@ -6,13 +6,14 @@ interface InputProps extends React.ComponentPropsWithRef<"input"> {
 }
 
 /**
- *
- * @param root0
- * @param root0.label
- * @param root0.error
- * @param root0.className
- * @param root0.id
- * @param root0.disabled
+ * Input component with label and error message support.
+ * @param root0 - The props object
+ * @param root0.label - Optional label text displayed above the input
+ * @param root0.error - Optional error message displayed below the input
+ * @param root0.className - Additional CSS classes to apply
+ * @param root0.id - Optional input ID (auto-generated if not provided)
+ * @param root0.disabled - Whether the input is disabled
+ * @returns The input component JSX
  */
 export function Input({
   label,

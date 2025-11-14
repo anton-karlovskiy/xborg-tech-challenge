@@ -5,11 +5,12 @@ interface AvatarProps extends ImageProps {
 }
 
 /**
- *
- * @param root0
- * @param root0.alt
- * @param root0.size
- * @param root0.className
+ * Avatar component for displaying user profile pictures.
+ * @param root0 - The props object
+ * @param root0.alt - Alt text for the image
+ * @param root0.size - Optional size for width and height
+ * @param root0.className - Additional CSS classes to apply
+ * @returns The avatar component JSX
  */
 function Avatar({
   alt = "Profile",

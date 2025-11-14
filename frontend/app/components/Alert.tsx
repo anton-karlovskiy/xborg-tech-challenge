@@ -3,10 +3,11 @@ interface AlertProps extends React.ComponentPropsWithRef<"div"> {
 }
 
 /**
- *
- * @param root0
- * @param root0.variant
- * @param root0.className
+ * Alert component for displaying messages with different variants.
+ * @param root0 - The props object
+ * @param root0.variant - The alert variant (error, success, info, warning)
+ * @param root0.className - Additional CSS classes to apply
+ * @returns The alert component JSX
  */
 function Alert({
   variant = "error",
