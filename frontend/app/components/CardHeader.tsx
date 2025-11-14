@@ -14,12 +14,7 @@ interface CardHeaderProps {
  * @param root0.className - Additional CSS classes to apply
  * @returns The card header component JSX
  */
-function CardHeader({
-  title,
-  description,
-  action,
-  className = "",
-}: CardHeaderProps) {
+function CardHeader({ title, description, action, className = "" }: CardHeaderProps) {
   const flexJustify = action ? "justify-between" : "justify-center";
 
   return (

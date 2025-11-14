@@ -17,11 +17,7 @@ import { PAGE_URLS } from "@/app/constants";
  * @param root0.children - The child components to render when authenticated
  * @returns The authenticated children or null if redirecting
  */
-function ProtectedLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function ProtectedLayout({ children }: { children: React.ReactNode }) {
   const { user } = useAuth();
 
   const router = useRouter();

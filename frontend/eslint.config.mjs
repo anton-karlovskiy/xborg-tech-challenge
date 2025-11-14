@@ -4,6 +4,7 @@ import tseslint from "typescript-eslint";
 import react from "eslint-plugin-react";
 import reactHooks from "eslint-plugin-react-hooks";
 import jsdoc from "eslint-plugin-jsdoc";
+import prettierConfig from "eslint-config-prettier";
 
 const config = [
   {
@@ -11,33 +12,33 @@ const config = [
     ignores: [
       // Dependencies
       "node_modules/**",
-      
+
       // Build outputs
       ".next/**",
       "dist/**",
       "build/**",
       "out/**",
-      
+
       // Config files (these are typically not linted)
       "*.config.js",
       "*.config.mjs",
       "*.config.ts",
-      
+
       // Generated files
       "next-env.d.ts",
       "tsconfig.tsbuildinfo",
-      
+
       // Environment and log files
       ".env*",
       "*.log",
-      
+
       // Coverage reports
       "coverage/**",
-      
+
       // Cache directories
       ".cache/**",
-      ".turbo/**"
-    ]
+      ".turbo/**",
+    ],
   },
   ...nextConfig,
   ...coreWebVitalsConfig,
@@ -47,7 +48,7 @@ const config = [
     plugins: {
       react,
       "react-hooks": reactHooks,
-      jsdoc
+      jsdoc,
     },
     languageOptions: {
       parser: tseslint.parser,
@@ -55,92 +56,106 @@ const config = [
         ecmaVersion: "latest",
         sourceType: "module",
         ecmaFeatures: {
-          jsx: true
+          jsx: true,
         },
         project: "./tsconfig.json",
-        tsconfigRootDir: import.meta.dirname || process.cwd()
-      }
+        tsconfigRootDir: import.meta.dirname || process.cwd(),
+      },
     },
     settings: {
       react: {
-        version: "detect"
-      }
+        version: "detect",
+      },
     },
     rules: {
       // Google Style Guide: Semicolons are required
-      "semi": ["error", "always"],
+      semi: ["error", "always"],
 
       // Google Style Guide: Use 2 spaces for indentation
-      "indent": ["error", 2, {
-        SwitchCase: 1,
-        VariableDeclarator: 1,
-        outerIIFEBody: 1,
-        MemberExpression: 1,
-        FunctionDeclaration: {
-          parameters: 1,
-          body: 1
+      indent: [
+        "error",
+        2,
+        {
+          SwitchCase: 1,
+          VariableDeclarator: 1,
+          outerIIFEBody: 1,
+          MemberExpression: 1,
+          FunctionDeclaration: {
+            parameters: 1,
+            body: 1,
+          },
+          FunctionExpression: {
+            parameters: 1,
+            body: 1,
+          },
+          CallExpression: {
+            arguments: 1,
+          },
+          ArrayExpression: 1,
+          ObjectExpression: 1,
+          ImportDeclaration: 1,
+          flatTernaryExpressions: false,
+          ignoredNodes: [
+            "TemplateLiteral *",
+            "JSXElement",
+            "JSXElement > *",
+            "JSXAttribute",
+            "JSXIdentifier",
+            "JSXNamespacedName",
+            "JSXMemberExpression",
+            "JSXSpreadAttribute",
+            "JSXExpressionContainer",
+            "JSXOpeningElement",
+            "JSXClosingElement",
+            "JSXFragment",
+            "JSXOpeningFragment",
+            "JSXClosingFragment",
+            "JSXText",
+            "JSXEmptyExpression",
+            "JSXSpreadChild",
+          ],
+          ignoreComments: false,
         },
-        FunctionExpression: {
-          parameters: 1,
-          body: 1
-        },
-        CallExpression: {
-          arguments: 1
-        },
-        ArrayExpression: 1,
-        ObjectExpression: 1,
-        ImportDeclaration: 1,
-        flatTernaryExpressions: false,
-        ignoredNodes: [
-          "TemplateLiteral *",
-          "JSXElement",
-          "JSXElement > *",
-          "JSXAttribute",
-          "JSXIdentifier",
-          "JSXNamespacedName",
-          "JSXMemberExpression",
-          "JSXSpreadAttribute",
-          "JSXExpressionContainer",
-          "JSXOpeningElement",
-          "JSXClosingElement",
-          "JSXFragment",
-          "JSXOpeningFragment",
-          "JSXClosingFragment",
-          "JSXText",
-          "JSXEmptyExpression",
-          "JSXSpreadChild"
-        ],
-        ignoreComments: false
-      }],
+      ],
 
       // Google Style Guide: Maximum line length (100 characters)
-      "max-len": ["error", {
-        code: 100,
-        tabWidth: 2,
-        ignoreUrls: true,
-        ignoreStrings: true,
-        ignoreTemplateLiterals: true,
-        ignoreRegExpLiterals: true,
-        ignoreComments: true
-      }],
+      "max-len": [
+        "error",
+        {
+          code: 100,
+          tabWidth: 2,
+          ignoreUrls: true,
+          ignoreStrings: true,
+          ignoreTemplateLiterals: true,
+          ignoreRegExpLiterals: true,
+          ignoreComments: true,
+        },
+      ],
 
       // Google Style Guide: Trailing commas allowed in arrays/objects but not in function parameters
       // This improves git diffs and aligns with modern Google TypeScript style
-      "comma-dangle": ["error", {
-        arrays: "always-multiline",
-        objects: "always-multiline",
-        imports: "never",
-        exports: "never",
-        functions: "never"
-      }],
+      "comma-dangle": [
+        "error",
+        {
+          arrays: "always-multiline",
+          objects: "always-multiline",
+          imports: "never",
+          exports: "never",
+          functions: "never",
+        },
+      ],
 
       // Google Style Guide: Use single quotes for strings, double quotes for JSX attributes
       // Note: Google JS style uses single quotes, but TypeScript/React commonly uses double
       // We'll use double quotes to match the existing codebase and JSX requirements
-      "quotes": ["error", "double", {
-        avoidEscape: true,
-        allowTemplateLiterals: true
-      }],
+      quotes: [
+        "error",
+        "double",
+        {
+          avoidEscape: true,
+          allowTemplateLiterals: true,
+        },
+      ],
 
       // Google Style Guide: No var, use let/const
       "no-var": "error",
@@ -148,7 +163,7 @@ const config = [
 
       // Google Style Guide: Prefer const over let
       "prefer-const": "error",
-      
+
       // Google Style Guide: Additional best practices
       "no-eval": "error",
       "no-implied-eval": "error",
@@ -163,52 +178,69 @@ const config = [
       "prefer-promise-reject-errors": "error",
       "prefer-spread": "error",
       "prefer-template": "error",
-      "radix": "error",
-      "yoda": "error",
+      radix: "error",
+      yoda: "error",
 
       // Google Style Guide: Use arrow functions for callbacks, function declarations for named functions
-      "func-style": ["error", "declaration", {
-        allowArrowFunctions: true
-      }],
+      "func-style": [
+        "error",
+        "declaration",
+        {
+          allowArrowFunctions: true,
+        },
+      ],
 
       // Google Style Guide: Require braces for all control statements
-      "curly": ["error", "all"],
+      curly: ["error", "all"],
 
       // Google Style Guide: No console.log in production (warn in development)
-      "no-console": ["warn", {
-        allow: ["warn", "error"]
-      }],
+      "no-console": [
+        "warn",
+        {
+          allow: ["warn", "error"],
+        },
+      ],
 
       // Google Style Guide: No debugger statements
       "no-debugger": "error",
 
       // Google Style Guide: Require === and !==
-      "eqeqeq": ["error", "always", {
-        null: "ignore"
-      }],
+      eqeqeq: [
+        "error",
+        "always",
+        {
+          null: "ignore",
+        },
+      ],
 
       // Google Style Guide: No unused variables
       "no-unused-vars": "off", // Turn off base rule
-      "@typescript-eslint/no-unused-vars": ["error", {
-        argsIgnorePattern: "^_",
-        varsIgnorePattern: "^_",
-        caughtErrorsIgnorePattern: "^_"
-      }],
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
 
       // Google Style Guide: Require JSDoc comments for public APIs
-      "jsdoc/require-jsdoc": ["warn", {
-        require: {
-          FunctionDeclaration: true,
-          MethodDefinition: true,
-          ClassDeclaration: true,
-          ArrowFunctionExpression: false,
-          FunctionExpression: false
+      "jsdoc/require-jsdoc": [
+        "warn",
+        {
+          require: {
+            FunctionDeclaration: true,
+            MethodDefinition: true,
+            ClassDeclaration: true,
+            ArrowFunctionExpression: false,
+            FunctionExpression: false,
+          },
+          contexts: [
+            "ExportNamedDeclaration > FunctionDeclaration",
+            "ExportDefaultDeclaration > FunctionDeclaration",
+          ],
         },
-        contexts: [
-          "ExportNamedDeclaration > FunctionDeclaration",
-          "ExportDefaultDeclaration > FunctionDeclaration"
-        ]
-      }],
+      ],
       "jsdoc/require-description": "warn",
       "jsdoc/require-param": "warn",
       "jsdoc/require-returns": "warn",
@@ -225,27 +257,36 @@ const config = [
       "array-bracket-spacing": ["error", "never"],
 
       // Google Style Guide: Space before function parentheses (except for anonymous functions)
-      "space-before-function-paren": ["error", {
-        anonymous: "always",
-        named: "never",
-        asyncArrow: "always"
-      }],
+      "space-before-function-paren": [
+        "error",
+        {
+          anonymous: "always",
+          named: "never",
+          asyncArrow: "always",
+        },
+      ],
 
       // Google Style Guide: Spacing around operators
       "space-infix-ops": "error",
 
       // Google Style Guide: Spacing around keywords
-      "keyword-spacing": ["error", {
-        before: true,
-        after: true
-      }],
+      "keyword-spacing": [
+        "error",
+        {
+          before: true,
+          after: true,
+        },
+      ],
 
       // Google Style Guide: No multiple empty lines (max 1 blank line)
-      "no-multiple-empty-lines": ["error", {
-        max: 1,
-        maxEOF: 1,
-        maxBOF: 0
-      }],
+      "no-multiple-empty-lines": [
+        "error",
+        {
+          max: 1,
+          maxEOF: 1,
+          maxBOF: 0,
+        },
+      ],
 
       // Google Style Guide: Trailing spaces not allowed
       "no-trailing-spaces": "error",
@@ -262,10 +303,13 @@ const config = [
       "@typescript-eslint/prefer-optional-chain": "error",
       "@typescript-eslint/no-unnecessary-type-assertion": "error",
       "@typescript-eslint/consistent-type-definitions": ["error", "interface"], // Google prefers interfaces
-      "@typescript-eslint/consistent-type-imports": ["error", {
-        prefer: "type-imports",
-        fixStyle: "inline-type-imports"
-      }], // Google style: use type imports for types
+      "@typescript-eslint/consistent-type-imports": [
+        "error",
+        {
+          prefer: "type-imports",
+          fixStyle: "inline-type-imports",
+        },
+      ], // Google style: use type imports for types
       "@typescript-eslint/no-empty-function": "warn",
       "@typescript-eslint/no-inferrable-types": "error", // Don't annotate obvious types
       "@typescript-eslint/no-unused-expressions": "error",
@@ -295,55 +339,75 @@ const config = [
       "react/self-closing-comp": "error",
       "react/jsx-closing-bracket-location": ["error", "line-aligned"],
       "react/jsx-closing-tag-location": "error",
-      "react/jsx-curly-spacing": ["error", {
-        when: "never",
-        children: true
-      }],
+      "react/jsx-curly-spacing": [
+        "error",
+        {
+          when: "never",
+          children: true,
+        },
+      ],
       "react/jsx-equals-spacing": ["error", "never"],
       "react/jsx-first-prop-new-line": ["error", "multiline-multiprop"],
       "react/jsx-indent": ["error", 2],
       "react/jsx-indent-props": ["error", 2],
-      "react/jsx-max-props-per-line": ["error", {
-        maximum: 1,
-        when: "multiline"
-      }],
-      "react/jsx-tag-spacing": ["error", {
-        closingSlash: "never",
-        beforeSelfClosing: "always",
-        afterOpening: "never",
-        beforeClosing: "never"
-      }],
-      "react/jsx-wrap-multilines": ["error", {
-        declaration: "parens-new-line",
-        assignment: "parens-new-line",
-        return: "parens-new-line",
-        arrow: "parens-new-line",
-        condition: "parens-new-line",
-        logical: "parens-new-line",
-        prop: "parens-new-line"
-      }],
+      "react/jsx-max-props-per-line": [
+        "error",
+        {
+          maximum: 1,
+          when: "multiline",
+        },
+      ],
+      "react/jsx-tag-spacing": [
+        "error",
+        {
+          closingSlash: "never",
+          beforeSelfClosing: "always",
+          afterOpening: "never",
+          beforeClosing: "never",
+        },
+      ],
+      "react/jsx-wrap-multilines": [
+        "error",
+        {
+          declaration: "parens-new-line",
+          assignment: "parens-new-line",
+          return: "parens-new-line",
+          arrow: "parens-new-line",
+          condition: "parens-new-line",
+          logical: "parens-new-line",
+          prop: "parens-new-line",
+        },
+      ],
 
       // React Hooks rules
       "react-hooks/rules-of-hooks": "error",
       "react-hooks/exhaustive-deps": "warn",
-      
+
       // Additional React best practices aligned with Google style
       "react/jsx-boolean-value": ["error", "never"], // Don't pass true explicitly
       "react/jsx-fragments": ["error", "syntax"], // Prefer <> over <React.Fragment>
-      "react/jsx-no-bind": ["warn", {
-        allowArrowFunctions: true,
-        allowFunctions: false,
-        allowBind: false
-      }],
+      "react/jsx-no-bind": [
+        "warn",
+        {
+          allowArrowFunctions: true,
+          allowFunctions: false,
+          allowBind: false,
+        },
+      ],
       "react/jsx-no-leaked-render": "error", // Prevent leaked renders (e.g., {count && <div>})
       "react/jsx-no-useless-fragment": "error",
       "react/no-unstable-nested-components": "error",
-      "react/function-component-definition": ["error", {
-        namedComponents: "function-declaration",
-        unnamedComponents: "arrow-function"
-      }] // Google style: function declarations for named components
-    }
-  }
+      "react/function-component-definition": [
+        "error",
+        {
+          namedComponents: "function-declaration",
+          unnamedComponents: "arrow-function",
+        },
+      ], // Google style: function declarations for named components
+    },
+  },
+  // Prettier config must come last to disable conflicting formatting rules
+  prettierConfig,
 ];
 
 export default config;

@@ -12,12 +12,7 @@ interface AvatarProps extends ImageProps {
  * @param root0.className - Additional CSS classes to apply
  * @returns The avatar component JSX
  */
-function Avatar({
-  alt = "Profile",
-  size,
-  className = "",
-  ...rest
-}: AvatarProps) {
+function Avatar({ alt = "Profile", size, className = "", ...rest }: AvatarProps) {
   return (
     <Image
       alt={alt}

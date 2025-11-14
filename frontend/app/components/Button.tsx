@@ -19,7 +19,8 @@ function Button({
   className = "",
   ...rest
 }: ButtonProps) {
-  const baseStyles = "cursor-pointer px-6 py-3 rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed";
+  const baseStyles =
+    "cursor-pointer px-6 py-3 rounded-lg transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variantStyles = {
     primary: "bg-indigo-500 text-white hover:bg-indigo-600",

@@ -20,7 +20,7 @@ const api = axios.create({
 
 interface GoogleLoginResponse {
   user: UserProfile;
-};
+}
 
 interface UserProfile {
   id: string;
@@ -30,19 +30,18 @@ interface UserProfile {
   picture?: string;
   createdAt: string;
   updatedAt: string;
-};
+}
 
 interface UpdateUserProfile {
   firstName?: string;
   lastName?: string;
-};
+}
 
 const authApi = {
   login: async (idToken: string): Promise<GoogleLoginResponse> => {
-    const response = await api.post<GoogleLoginResponse>(
-      API_END_POINTS.AUTH_LOGIN_GOOGLE,
-      { idToken }
-    );
+    const response = await api.post<GoogleLoginResponse>(API_END_POINTS.AUTH_LOGIN_GOOGLE, {
+      idToken,
+    });
 
     return response.data;
   },
@@ -66,14 +65,8 @@ const userApi = {
   },
 };
 
-export type {
-  UserProfile,
-  UpdateUserProfile
-};
+export type { UserProfile, UpdateUserProfile };
 
-export {
-  authApi,
-  userApi
-};
+export { authApi, userApi };
 
 export default api;

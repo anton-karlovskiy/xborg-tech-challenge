@@ -7,7 +7,4 @@ const QUERY_KEYS = {
   USER_PROFILE: ["user", "profile"] as const,
 } as const;
 
-export {
-  PAGE_URLS,
-  QUERY_KEYS
-};
+export { PAGE_URLS, QUERY_KEYS };

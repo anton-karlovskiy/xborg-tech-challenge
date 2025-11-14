@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
-    "lint:next": "next lint"
+    "lint:next": "next lint",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.7",
@@ -28,10 +30,12 @@
     "@typescript-eslint/parser": "^8.46.3",
     "eslint": "9.39.1",
     "eslint-config-next": "^16.0.1",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-jsdoc": "^61.2.1",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
     "postcss": "^8.4.32",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4.1.17",
     "typescript": "^5.9.3"
   }

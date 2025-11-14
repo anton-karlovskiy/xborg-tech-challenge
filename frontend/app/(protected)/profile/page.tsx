@@ -1,31 +1,13 @@
 "use client";
 
-import {
-  useState,
-  useActionState,
-  useId
-} from "react";
+import { useState, useActionState, useId } from "react";
 import { useFormStatus } from "react-dom";
-import {
-  useMutation,
-  useQueryClient
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useTimeoutFn } from "react-use";
 
 import { useAuth } from "@/app/contexts/auth-context";
-import {
-  Button,
-  type ButtonProps,
-  Input,
-  Card,
-  Avatar,
-  Alert,
-  CardHeader
-} from "@/app/components";
-import {
-  userApi,
-  type UpdateUserProfile
-} from "@/lib/api";
+import { Button, type ButtonProps, Input, Card, Avatar, Alert, CardHeader } from "@/app/components";
+import { userApi, type UpdateUserProfile } from "@/lib/api";
 import { QUERY_KEYS } from "@/app/constants";
 
 /**
@@ -37,12 +19,7 @@ function SubmitButton() {
   const { pending } = useFormStatus();
 
   return (
-    <Button
-      type="submit"
-      variant="primary"
-      disabled={pending}
-      fullWidth
-    >
+    <Button type="submit" variant="primary" disabled={pending} fullWidth>
       {pending ? "Saving..." : "Save Changes"}
     </Button>
   );
@@ -57,13 +34,7 @@ function CancelButton(props: ButtonProps) {
   const { pending } = useFormStatus();
 
   return (
-    <Button
-      type="button"
-      variant="secondary"
-      disabled={pending}
-      fullWidth
-      {...props}
-    >
+    <Button type="button" variant="secondary" disabled={pending} fullWidth {...props}>
       Cancel
     </Button>
   );
@@ -86,7 +57,9 @@ function Profile() {
   const { user, logout } = useAuth();
 
   if (!user) {
-    throw new Error("User must be authenticated to access this page. This error should not occur as ProtectedLayout should handle authentication.");
+    throw new Error(
+      "User must be authenticated to access this page. This error should not occur as ProtectedLayout should handle authentication."
+    );
   }
 
   const queryClient = useQueryClient();
@@ -108,7 +81,7 @@ function Profile() {
   const updateProfileMutation = useMutation({
     mutationFn: async (updateData: UpdateUserProfile) => {
       // Testing delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
       return userApi.editProfile(updateData);
     },
@@ -119,10 +92,7 @@ function Profile() {
     },
   });
 
-  const updateProfile = async (
-    prevState: FormState,
-    formData: FormData
-  ): Promise<FormState> => {
+  const updateProfile = async (prevState: FormState, formData: FormData): Promise<FormState> => {
     try {
       const updateData: UpdateUserProfile = {
         firstName: String(formData.get(FIRST_NAME_FIELD)) || undefined,
@@ -141,7 +111,8 @@ function Profile() {
       cancelSuccessAlertTimer();
 
       return {
-        error: error instanceof Error ? error.message : "Failed to update profile. Please try again.",
+        error:
+          error instanceof Error ? error.message : "Failed to update profile. Please try again.",
         success: false,
       };
     }
@@ -158,34 +129,19 @@ function Profile() {
         <Card className="space-y-8">
           <CardHeader
             title="Profile"
-            action={(
-              <Button
-                variant="danger"
-                onClick={logout}
-              >
+            action={
+              <Button variant="danger" onClick={logout}>
                 Sign Out
               </Button>
-            )}
+            }
           />
           <div className="space-y-6">
             {/* Profile Picture */}
             {user.picture ? (
-              <Avatar
-                src={user.picture}
-                alt="Profile"
-                size={128}
-                className="mx-auto"
-              />
+              <Avatar src={user.picture} alt="Profile" size={128} className="mx-auto" />
             ) : null}
             {/* Email (read-only) */}
-            <Input
-              id={emailId}
-              type="email"
-              label="Email"
-              value={user.email}
-              readOnly
-              disabled
-            />
+            <Input id={emailId} type="email" label="Email" value={user.email} readOnly disabled />
             <form action={formAction} className="space-y-6">
               {/* First Name */}
               <Input
@@ -210,7 +166,9 @@ function Profile() {
               {/* Error Message */}
               {isEditing && state.error ? <Alert variant="error">{state.error}</Alert> : null}
               {/* Success Message */}
-              {isEditing && state.success && successAlertDisplayable ? <Alert variant="success">Profile updated successfully</Alert> : null}
+              {isEditing && state.success && successAlertDisplayable ? (
+                <Alert variant="success">Profile updated successfully</Alert>
+              ) : null}
               {/* Action Buttons */}
               <div className="flex gap-4 pt-4">
                 {isEditing ? (
@@ -219,11 +177,7 @@ function Profile() {
                     <SubmitButton />
                   </>
                 ) : (
-                  <Button
-                    type="button"
-                    onClick={() => setIsEditing(true)}
-                    fullWidth
-                  >
+                  <Button type="button" onClick={() => setIsEditing(true)} fullWidth>
                     Edit Profile
                   </Button>
                 )}
@@ -232,7 +186,8 @@ function Profile() {
             {/* Account Info */}
             <div className="pt-6 border-t border-gray-200 space-y-1">
               <p className="text-sm text-gray-500">
-                Account created: {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
+                Account created:{" "}
+                {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
               </p>
               {user.updatedAt !== user.createdAt && (
                 <p className="text-sm text-gray-500">

@@ -15,14 +15,7 @@ interface InputProps extends React.ComponentPropsWithRef<"input"> {
  * @param root0.disabled - Whether the input is disabled
  * @returns The input component JSX
  */
-export function Input({
-  label,
-  error,
-  className = "",
-  id,
-  disabled,
-  ...rest
-}: InputProps) {
+export function Input({ label, error, className = "", id, disabled, ...rest }: InputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
   const hasError = !!error;
@@ -37,10 +30,7 @@ export function Input({
   return (
     <div className="space-y-1">
       {label ? (
-        <label
-          htmlFor={inputId}
-          className="block text-sm font-medium text-gray-700"
-        >
+        <label htmlFor={inputId} className="block text-sm font-medium text-gray-700">
           {label}
         </label>
       ) : null}

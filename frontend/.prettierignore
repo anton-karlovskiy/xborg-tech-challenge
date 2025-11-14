@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+dist/
+build/
+out/
+
+# Generated files
+next-env.d.ts
+tsconfig.tsbuildinfo
+
+# Environment files
+.env*
+
+# Logs
+*.log
+
+# Coverage
+coverage/
+
+# Cache
+.cache/
+.turbo/
+
+# Package manager files
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+

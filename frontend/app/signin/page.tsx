@@ -1,16 +1,10 @@
 "use client";
 
-import {
-  useEffect,
-  useCallback
-} from "react";
+import { useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 
 import { useAuth } from "@/app/contexts/auth-context";
-import {
-  Card,
-  CardHeader
-} from "@/app/components";
+import { Card, CardHeader } from "@/app/components";
 import { PAGE_URLS } from "@/app/constants";
 
 if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
@@ -58,15 +52,18 @@ function Signin() {
 
   const { user, login } = useAuth();
 
-  const googleSigninCallback = useCallback(async (response: CredentialResponse) => {
-    try {
-      await login(response.credential);
-      router.push(PAGE_URLS.PROFILE);
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Failed to sign in. Please try again.");
-    }
-  }, [login, router]);
+  const googleSigninCallback = useCallback(
+    async (response: CredentialResponse) => {
+      try {
+        await login(response.credential);
+        router.push(PAGE_URLS.PROFILE);
+      } catch (error) {
+        console.error("Login error:", error);
+        alert("Failed to sign in. Please try again.");
+      }
+    },
+    [login, router]
+  );
 
   useEffect(() => {
     // Redirect if already logged in
@@ -93,14 +90,11 @@ function Signin() {
           callback: googleSigninCallback,
         });
 
-        window.google.accounts.id.renderButton(
-          document.getElementById(STR_GOOGLE_SIGNIN_BUTTON),
-          {
-            theme: "outline",
-            size: "large",
-            width: 300,
-          }
-        );
+        window.google.accounts.id.renderButton(document.getElementById(STR_GOOGLE_SIGNIN_BUTTON), {
+          theme: "outline",
+          size: "large",
+          width: 300,
+        });
       }
     };
 
@@ -125,6 +119,6 @@ function Signin() {
       </div>
     </div>
   );
-};
+}
 
 export default Signin;

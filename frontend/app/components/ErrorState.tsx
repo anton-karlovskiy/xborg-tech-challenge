@@ -10,10 +10,7 @@ interface ErrorStateProps {
  * @param root0.className - Additional CSS classes to apply
  * @returns The error state component JSX
  */
-function ErrorState({
-  message,
-  className = "",
-}: ErrorStateProps) {
+function ErrorState({ message, className = "" }: ErrorStateProps) {
   return (
     <div className={`min-h-screen flex items-center justify-center ${className}`}>
       <div className="text-xl">Error: {message}</div>

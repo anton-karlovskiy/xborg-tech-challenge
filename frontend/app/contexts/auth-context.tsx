@@ -1,29 +1,12 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useEffect
-} from "react";
+import { createContext, useContext, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  useQuery,
-  useQueryClient
-} from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
-import {
-  authApi,
-  userApi,
-  type UserProfile
-} from "@/lib/api";
-import {
-  PAGE_URLS,
-  QUERY_KEYS
-} from "@/app/constants";
-import {
-  LoadingState,
-  ErrorState
-} from "@/app/components";
+import { authApi, userApi, type UserProfile } from "@/lib/api";
+import { PAGE_URLS, QUERY_KEYS } from "@/app/constants";
+import { LoadingState, ErrorState } from "@/app/components";
 
 /**
  * AuthProvider adopts the "render authenticated vs unauthenticated trees"
@@ -40,11 +23,14 @@ import {
  * profile or `null`, without worrying about loading states or token drift.
  */
 
-const AuthContext = createContext<{
-  user: UserProfile | null;
-  login: (googleIdToken: string) => Promise<void>;
-  logout: () => Promise<void>;
-    } | undefined>(undefined);
+const AuthContext = createContext<
+  | {
+      user: UserProfile | null;
+      login: (googleIdToken: string) => Promise<void>;
+      logout: () => Promise<void>;
+    }
+  | undefined
+>(undefined);
 
 /**
  * Auth provider component that manages authentication state and provides auth context.
@@ -84,7 +70,12 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   // Don't show error state for authentication failures - just treat as unauthenticated
   // Only show error for unexpected server errors (5xx)
-  if (error && error instanceof Error && !error.message.includes("401") && !error.message.includes("403")) {
+  if (
+    error &&
+    error instanceof Error &&
+    !error.message.includes("401") &&
+    !error.message.includes("403")
+  ) {
     return <ErrorState message={error.message} />;
   }
 
@@ -121,7 +112,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
-};
+}
 
 /**
  * Hook to access authentication context.
@@ -135,9 +126,6 @@ function useAuth() {
   }
 
   return context;
-};
+}
 
-export {
-  AuthProvider,
-  useAuth
-};
+export { AuthProvider, useAuth };

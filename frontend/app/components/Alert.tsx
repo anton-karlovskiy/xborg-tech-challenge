@@ -9,11 +9,7 @@ interface AlertProps extends React.ComponentPropsWithRef<"div"> {
  * @param root0.className - Additional CSS classes to apply
  * @returns The alert component JSX
  */
-function Alert({
-  variant = "error",
-  className = "",
-  ...rest
-}: AlertProps) {
+function Alert({ variant = "error", className = "", ...rest }: AlertProps) {
   const variantStyles = {
     error: "bg-red-50 border-red-200 text-red-700",
     success: "bg-green-50 border-green-200 text-green-700",

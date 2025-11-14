@@ -19,22 +19,16 @@ export const metadata: Metadata = {
  * @param root0.children - The child components to render
  * @returns The root layout JSX
  */
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <QueryProvider>
           <AuthProvider>
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100">
-              {children}
-            </div>
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-100">{children}</div>
           </AuthProvider>
         </QueryProvider>
       </body>
     </html>
   );
-};
+}
