@@ -1,20 +1,20 @@
 import { type TypeOrmModuleOptions } from "@nestjs/typeorm";
+import { ConfigService } from "@nestjs/config";
 
 import { User } from "../user/entities/user.entity";
 
-export const typeormConfig = (): TypeOrmModuleOptions => {
-  const type = process.env.DB_TYPE;
-
-  const synchronizeEnabled = process.env.NODE_ENV !== "production";
+export const typeormConfig = (configService: ConfigService): TypeOrmModuleOptions => {
+  const type = configService.get<string>("DB_TYPE", "sqlite");
+  const synchronizeEnabled = configService.get<string>("NODE_ENV", "development") !== "production";
 
   if (type === "postgres") {
     return {
       type: "postgres",
-      host: process.env.DB_HOST,
-      port: Number(process.env.DB_PORT || 5432),
-      username: process.env.DB_USERNAME,
-      password: process.env.DB_PASSWORD,
-      database: process.env.DB_DATABASE || "xborg",
+      host: configService.get<string>("DB_HOST"),
+      port: configService.get<number>("DB_PORT", 5432),
+      username: configService.get<string>("DB_USERNAME"),
+      password: configService.get<string>("DB_PASSWORD"),
+      database: configService.get<string>("DB_DATABASE", "xborg"),
       entities: [User],
       synchronize: synchronizeEnabled,
     };
@@ -22,7 +22,7 @@ export const typeormConfig = (): TypeOrmModuleOptions => {
 
   return {
     type: "sqlite",
-    database: process.env.DB_DATABASE,
+    database: configService.get<string>("DB_DATABASE"),
     entities: [User],
     synchronize: synchronizeEnabled,
   };

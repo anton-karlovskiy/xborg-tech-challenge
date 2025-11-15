@@ -13,6 +13,8 @@ A full-stack application with Google OAuth authentication and user profile manag
 - **SQLite** - Database engine
 - **JWT** - Authentication tokens
 - **Passport** - Authentication middleware
+- **@nestjs/microservices** - Microservices support with Redis message broker
+- **Redis** - Message broker for microservices communication
 
 ### Frontend
 
@@ -26,6 +28,7 @@ A full-stack application with Google OAuth authentication and user profile manag
 
 - Node.js 20 or higher
 - npm or yarn
+- **Redis** - Required for microservices architecture (see [Redis installation guide](https://redis.io/docs/getting-started/installation/))
 
 ## Setup Instructions
 
@@ -55,13 +58,38 @@ cp env.example .env
    - Create a new OAuth 2.0 Client ID
    - Add `http://localhost:3000` to authorized JavaScript origins
    - Add `http://localhost:3000` to authorized redirect URIs
+   - Redis settings are already configured with defaults (`REDIS_HOST=localhost`, `REDIS_PORT=6379`)
 
-5. Start the backend server:
+5. **Start Redis** (required for microservices):
 ```bash
-npm run start:dev
+# On Windows (if installed via WSL or Docker)
+# Or use Redis for Windows: https://github.com/microsoftarchive/redis/releases
+redis-server
+
+# On Linux/Mac
+redis-server
+
+# Or using Docker
+docker run -d -p 6379:6379 redis:alpine
 ```
 
-The backend will run on `http://localhost:3001`
+6. Start the backend with microservices architecture:
+```bash
+# Option 1: Run all services together (recommended)
+npm run start:microservices
+
+# Option 2: Run services individually in separate terminals
+# Terminal 1:
+npm run start:gateway
+# Terminal 2:
+npm run start:auth
+# Terminal 3:
+npm run start:user
+```
+
+The API Gateway will run on `http://localhost:3001` and communicate with microservices via Redis.
+
+> **Note**: The application uses a microservices architecture. All three services (API Gateway, Auth Microservice, User Microservice) must be running for the application to work correctly. See [Microservices Documentation](./backend/MICROSERVICES.md) for more details.
 
 ### 2. Frontend Setup
 
@@ -150,8 +178,10 @@ The frontend will run on `http://localhost:3000`
 - `JWT_EXPIRES_IN` - JWT token expiration time
 - `GOOGLE_CLIENT_ID` - Google OAuth Client ID
 - `GOOGLE_CLIENT_SECRET` - Google OAuth Client Secret
-- `PORT` - Backend server port
+- `PORT` - Backend server port (API Gateway)
 - `FRONTEND_URL` - Frontend URL for CORS
+- `REDIS_HOST` - Redis server host (default: `localhost`)
+- `REDIS_PORT` - Redis server port (default: `6379`)
 
 ### Frontend (.env.local)
 
@@ -163,6 +193,7 @@ The frontend will run on `http://localhost:3000`
 - The SQLite database file (`database.sqlite`) will be created automatically on first run
 - JWT tokens are stored in HttpOnly cookies (not localStorage) for enhanced security
 - Sessions persist between browser visits
+- **Microservices Architecture**: The backend uses a microservices architecture with Redis as the message broker. All services (API Gateway, Auth Microservice, User Microservice) must be running for the application to work. See [Microservices Documentation](./backend/MICROSERVICES.md) for details.
 
 ## Security Improvements TODO
 
@@ -188,12 +219,22 @@ The frontend will run on `http://localhost:3000`
 
 ### Backend
 
-- `npm run start:dev` - Development server with hot reload
+#### Microservices Architecture (Current)
+
+- `npm run start:microservices` - Run all services together (API Gateway + Auth + User microservices)
+- `npm run start:gateway` - Run API Gateway only
+- `npm run start:auth` - Run Auth microservice only
+- `npm run start:user` - Run User microservice only
+
+#### General Commands
+
 - `npm run build` - Build for production
-- `npm run start:prod` - Production server
+- `npm run start:prod` - Production server (runs API Gateway)
 - `npm run lint` - Run ESLint (fails on warnings)
 - `npm run lint:fix` - Auto-fix ESLint issues
 - `npm run test` - Run tests
+
+> **Note**: The backend now uses a microservices architecture. See [Microservices Documentation](./backend/MICROSERVICES.md) for detailed information about the architecture and how it works.
 
 ### Frontend
 

@@ -1,4 +1,5 @@
 import { Injectable } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
 import { type Request } from "express";
@@ -10,10 +11,12 @@ import { type Request } from "express";
 export class JwtStrategy extends PassportStrategy(Strategy) {
   /**
    * Creates an instance of JwtStrategy.
+   *
+   * @param configService - Configuration service for accessing environment variables.
    */
-  constructor() {
+  constructor(private configService: ConfigService) {
     super({
-      secretOrKey: process.env.JWT_SECRET,
+      secretOrKey: configService.get<string>("JWT_SECRET"),
       ignoreExpiration: false,
       jwtFromRequest: ExtractJwt.fromExtractors([
         // First try to extract from cookie

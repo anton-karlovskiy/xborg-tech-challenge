@@ -17,4 +17,7 @@ export const envSchema = Joi.object({
   GOOGLE_CLIENT_ID: Joi.string().required(),
   GOOGLE_CLIENT_SECRET: Joi.string().allow("").optional(), // not strictly needed for id_token login
   FRONTEND_URL: Joi.string().required(),
+
+  REDIS_HOST: Joi.string().default("localhost"),
+  REDIS_PORT: Joi.number().default(6379),
 });

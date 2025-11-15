@@ -1,19 +1,18 @@
 import { Module } from "@nestjs/common";
-import { TypeOrmModule } from "@nestjs/typeorm";
 import { JwtModule } from "@nestjs/jwt";
 import { type SignOptions } from "jsonwebtoken";
 
-import { AuthService } from "./auth.service";
-import { AuthController } from "./auth.controller";
+import { ConfigModule } from "../config/config.module";
 import { JwtStrategy } from "./strategies/jwt.strategy";
-import { User } from "../user/entities/user.entity";
 
 /**
- *
+ * Auth module for API Gateway.
+ * Provides JWT strategy for authentication guards.
+ * Note: AuthMicroservice and AuthService are in AuthMicroserviceModule for microservices.
  */
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    ConfigModule,
     JwtModule.registerAsync({
       useFactory: () => {
         const signOptions: SignOptions = {
@@ -27,8 +26,7 @@ import { User } from "../user/entities/user.entity";
       },
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
-  exports: [AuthService],
+  providers: [JwtStrategy],
+  exports: [],
 })
 export class AuthModule {}
